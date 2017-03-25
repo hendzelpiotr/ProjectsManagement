@@ -1,0 +1,34 @@
+CREATE TABLE role
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user
+(
+  id SERIAL PRIMARY KEY,
+  login VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  surname VARCHAR(50) NOT NULL,
+  professor_id INTEGER REFERENCES user(id),
+  role_id INTEGER NOT NULL REFERENCES role(id),
+  laboratory_group INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS project
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  description VARCHAR(2000)
+);
+
+CREATE TABLE IF NOT EXISTS user_project
+(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES user(id),
+  project_id INTEGER NOT NULL REFERENCES project(id),
+  mark VARCHAR(100),
+  completion_date TIMESTAMP
+);
+
