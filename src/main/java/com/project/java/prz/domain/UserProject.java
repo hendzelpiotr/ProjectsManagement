@@ -1,6 +1,5 @@
 package com.project.java.prz.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProject {
 
     @Id

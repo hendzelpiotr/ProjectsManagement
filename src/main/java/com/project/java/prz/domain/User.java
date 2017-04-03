@@ -30,7 +30,7 @@ public class User {
     private Integer laboratoryGroup;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professor_id")
-    private User professorId;
+    private User professor;
     @NotNull
     @ManyToOne
     @JoinColumn(name = "role_id")
