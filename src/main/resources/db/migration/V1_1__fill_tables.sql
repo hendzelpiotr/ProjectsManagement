@@ -2,11 +2,11 @@ INSERT INTO projects_management_db.role (name)
 VALUES ('ROLE_ADMIN'), ('ROLE_STUDENT');
 
 INSERT INTO projects_management_db.user (login, password, name, surname, role_id)
-VALUES ('adminprz', 'admin123', 'Piotr', 'Hendzel', 1);
+VALUES ('adminprz', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Piotr', 'Hendzel', 1);
 
 INSERT INTO projects_management_db.user (login, password, name, surname, role_id, laboratory_group, professor_id)
-VALUES ('kgracik', 'gracik123', 'Kamila', 'Gracik', 2, 2, 1),
-  ('jsadnik','12345user','Jarosław','Stadnik',2,7,1);
+VALUES ('kgracik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Kamila', 'Gracik', 2, 2, 1),
+  ('jsadnik','$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.','Jarosław','Stadnik',2,7,1);
 
 INSERT INTO projects_management_db.project (name, description)
 VALUES

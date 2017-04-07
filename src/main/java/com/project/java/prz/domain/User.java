@@ -28,6 +28,9 @@ public class User {
     @NotNull
     private String surname;
     private Integer laboratoryGroup;
+    @NotNull
+    @Column(name = "enabled")
+    private Boolean isEnabled;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professor_id")
     private User professor;

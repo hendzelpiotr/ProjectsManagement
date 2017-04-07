@@ -8,13 +8,14 @@ CREATE TABLE IF NOT EXISTS role
 CREATE TABLE IF NOT EXISTS user
 (
   id INTEGER NOT NULL AUTO_INCREMENT,
-  login VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  surname VARCHAR(50) NOT NULL,
+  login VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  surname VARCHAR(100) NOT NULL,
   professor_id INTEGER,
   role_id INTEGER NOT NULL,
   laboratory_group INTEGER,
+  enabled BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (id),
   FOREIGN KEY (professor_id) REFERENCES user(id),
   FOREIGN KEY (role_id) REFERENCES role(id)
