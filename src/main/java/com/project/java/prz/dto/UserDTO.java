@@ -18,6 +18,6 @@ public class UserDTO {
     private String name;
     private String surname;
     private Integer laboratoryGroup;
-    private Boolean isEnabled;
+    private Boolean enabled;
 
 }

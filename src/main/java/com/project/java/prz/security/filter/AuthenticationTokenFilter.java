@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final String tokenHeader = "X-Auth-Token";
+    private static final String tokenHeader = "X-Auth-Token";
 
     @Autowired
     private TokenUtils tokenUtils;
@@ -32,8 +32,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
     private UserDetailsService userDetailsService;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         tokenUtils = WebApplicationContextUtils
                 .getRequiredWebApplicationContext(this.getServletContext())
                 .getBean(TokenUtils.class);
