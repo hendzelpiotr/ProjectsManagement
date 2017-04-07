@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getOne(Integer id) {
         User user = userRepository.findOne(id);
-        return UserMapper.INSTANCE.convertToDto(user);
+        return UserMapper.INSTANCE.convertToDTO(user);
     }
 
     @Override

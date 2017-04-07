@@ -5,6 +5,8 @@ import com.project.java.prz.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * Created by Piotr on 03.04.2017.
  */
@@ -13,8 +15,12 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserDTO convertToDto(User user);
+    UserDTO convertToDTO(User user);
 
     User convertToEntity(UserDTO userDTO);
+
+    List<UserDTO> convertToDTOs(List<User> users);
+
+    List<User> convertToEntities(List<UserDTO> userDTOs);
 
 }
