@@ -16,12 +16,13 @@ import java.util.List;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull
     private String name;
     @NotNull
     private String description;
+    private Integer availableProjectsCounter;
     @OneToMany(mappedBy = "project")
     private List<UserProject> userProjects;
 

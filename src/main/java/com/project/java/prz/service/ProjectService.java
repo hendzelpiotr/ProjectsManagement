@@ -1,6 +1,7 @@
 package com.project.java.prz.service;
 
 import com.project.java.prz.dto.ProjectDTO;
+import com.project.java.prz.dto.UserProjectDTO;
 
 import java.util.List;
 
@@ -10,5 +11,6 @@ import java.util.List;
 public interface ProjectService {
 
     List<ProjectDTO> getAll();
+    UserProjectDTO assignProjectToStudent(String login, Integer projectId);
 
 }

@@ -15,12 +15,13 @@ import java.time.LocalDateTime;
 public class UserProject {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String mark;
     @Column(name = "completion_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime completionDateTime;
-    @OneToOne(mappedBy = "userProject", fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
