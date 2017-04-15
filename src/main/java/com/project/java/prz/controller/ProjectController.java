@@ -5,7 +5,6 @@ import com.project.java.prz.dto.UserProjectDTO;
 import com.project.java.prz.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,7 +25,6 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getAll());
     }
 
-    @Secured("ROLE_STUDENT")
     @PostMapping("{id}")
     public ResponseEntity<UserProjectDTO> assignProject(@PathVariable("id") Integer id, Principal principal) {
         return ResponseEntity.ok(projectService.assignProjectToStudent(principal.getName(), id));
