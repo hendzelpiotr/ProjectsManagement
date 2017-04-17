@@ -19,6 +19,5 @@ public class UserDTO {
     private String surname;
     private Integer laboratoryGroup;
     private Boolean enabled;
-    private UserProjectDTO userProjectDTO;
 
 }
