@@ -17,5 +17,6 @@ public class UserProjectDTO {
     private Integer id;
     private String mark;
     private LocalDateTime completionDateTime;
+    private ProjectDTO projectDTO;
 
 }
