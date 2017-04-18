@@ -11,5 +11,6 @@ public interface UserProjectService {
 
     List<UserProjectDTO> getAll();
     UserProjectDTO assignProjectToStudent(String login, Integer projectId);
+    void deleteById(String login, Integer id);
 
 }

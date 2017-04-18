@@ -1,6 +1,7 @@
 package com.project.java.prz.service;
 
 import com.project.java.prz.domain.Project;
+import com.project.java.prz.domain.RoleType;
 import com.project.java.prz.domain.User;
 import com.project.java.prz.domain.UserProject;
 import com.project.java.prz.dto.UserProjectDTO;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static com.project.java.prz.exception.ProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT;
 
 /**
  * Created by Piotr on 17.04.2017.
@@ -62,6 +65,28 @@ public class UserProjectServiceImpl implements UserProjectService {
         } else {
             throw new ProjectException(ProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
         }
+    }
+
+    @Override
+    public void deleteById(String login, Integer id) {
+        User user = userRepository.findByLogin(login);
+
+        if (isAdmin(user) || isPossibleToRemove(id, user)) {
+            userProjectRepository.delete(id);
+        } else throw new ProjectException(YOU_CAN_NOT_ABANDON_PROJECT);
+    }
+
+    private boolean isAdmin(User user) {
+        return RoleType.ROLE_ADMIN.equals(user.getRole().getName());
+    }
+
+    private boolean isPossibleToRemove(Integer id, User user) {
+        UserProject userProject = user.getUserProject();
+
+        if (id == userProject.getId() && userProject.getCompletionDateTime() != null)
+            return true;
+
+        return false;
     }
 
 }

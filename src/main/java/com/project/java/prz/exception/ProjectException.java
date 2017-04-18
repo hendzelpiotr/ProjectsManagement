@@ -15,7 +15,9 @@ public class ProjectException extends RuntimeException {
     private FailReason failReason;
 
     public enum FailReason {
-        PROJECT_DOES_NOT_EXIST, YOU_ALREADY_CHOSE_PROJECT
+        PROJECT_DOES_NOT_EXIST,
+        YOU_ALREADY_CHOSE_PROJECT,
+        YOU_CAN_NOT_ABANDON_PROJECT
     }
 
 }

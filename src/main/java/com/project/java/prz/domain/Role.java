@@ -22,7 +22,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleType name;
     @OneToMany(mappedBy = "role")
     @JsonIgnore
     private List<User> users;
