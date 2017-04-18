@@ -31,7 +31,7 @@ public class UserProjectController {
         return ResponseEntity.ok(createdUserProjectDTO);
     }
 
-    @DeleteMapping(name = "{id")
+    @DeleteMapping(value = "{id}")
     public ResponseEntity delete(@PathVariable("id") Integer id, Principal principal) {
         userProjectService.deleteById(principal.getName(), id);
         return ResponseEntity.noContent().build();

@@ -44,8 +44,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         User user = userRepository.findByLogin(login);
         Project project = projectRepository.getOne(projectId);
 
-        if (project == null)
-            throw new ProjectException(ProjectException.FailReason.PROJECT_DOES_NOT_EXIST);
+        isExisting(project);
 
         Integer availableProjectsCounter = project.getAvailableProjectsCounter();
 
@@ -65,6 +64,11 @@ public class UserProjectServiceImpl implements UserProjectService {
         } else {
             throw new ProjectException(ProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
         }
+    }
+
+    private void isExisting(Project project) {
+        if (project == null)
+            throw new ProjectException(ProjectException.FailReason.PROJECT_DOES_NOT_EXIST);
     }
 
     @Override
