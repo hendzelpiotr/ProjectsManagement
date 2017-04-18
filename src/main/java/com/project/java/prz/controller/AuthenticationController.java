@@ -43,7 +43,7 @@ public class AuthenticationController {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = this.tokenUtils.generateToken(userDetails);
         String role = userDetails.getAuthorities().toString()
-                .replace("[s", "")
+                .replace("[", "")
                 .replace("]", "");
 
         return ResponseEntity.ok(new AuthenticationResponse(token, role));
