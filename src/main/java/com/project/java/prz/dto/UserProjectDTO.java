@@ -17,6 +17,12 @@ public class UserProjectDTO {
     private Integer id;
     private String mark;
     private LocalDateTime completionDateTime;
+    private LocalDateTime datetimeOfProjectSelection;
+    private String programmingLanguage;
+    private String technologies;
+    private String database;
+    private String additionalInformation;
+    private String repositoryLink;
     private UserDTO userDTO;
     private ProjectDTO projectDTO;
 

@@ -25,6 +25,12 @@ public class UserProjectController {
         return ResponseEntity.ok(userProjectDTOs);
     }
 
+    @GetMapping("my")
+    public ResponseEntity<UserProjectDTO> getUserProjectOfCurrentlyLoggedInUser(Principal principal) {
+        UserProjectDTO userProjectDTO = userProjectService.getUserProjectOfCurrentlyLoggedInUser(principal.getName());
+        return ResponseEntity.ok(userProjectDTO);
+    }
+
     @PostMapping
     public ResponseEntity<UserProjectDTO> createNew(@RequestBody UserProjectDTO userProjectDTO, Principal principal) {
         UserProjectDTO createdUserProjectDTO = userProjectService.assignProjectToStudent(principal.getName(), userProjectDTO.getProjectDTO().getId());

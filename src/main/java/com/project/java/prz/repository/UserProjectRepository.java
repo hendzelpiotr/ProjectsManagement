@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserProjectRepository extends JpaRepository<UserProject, Integer> {
+
+    UserProject findByUserLogin(String login);
+
 }

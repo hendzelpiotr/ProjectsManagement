@@ -18,8 +18,14 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String mark;
-    @Column(name = "completion_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "completion_date")
     private LocalDateTime completionDateTime;
+    private LocalDateTime datetimeOfProjectSelection;
+    private String programmingLanguage;
+    private String technologies;
+    private String database;
+    private String additionalInformation;
+    private String repositoryLink;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

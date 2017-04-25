@@ -40,6 +40,11 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     @Override
+    public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
+        return UserProjectMapper.INSTANCE.convertToDTO(userProjectRepository.findByUserLogin(login));
+    }
+
+    @Override
     public UserProjectDTO assignProjectToStudent(String login, Integer projectId) {
         User user = userRepository.findByLogin(login);
         Project project = projectRepository.getOne(projectId);
