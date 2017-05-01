@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.project.java.prz.exception.ProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT;
@@ -58,6 +59,7 @@ public class UserProjectServiceImpl implements UserProjectService {
             UserProject userProject = new UserProject();
             userProject.setProject(project);
             userProject.setUser(user);
+            userProject.setDatetimeOfProjectSelection(LocalDateTime.now());
             userProject = userProjectRepository.save(userProject);
 
             if (availableProjectsCounter != null) {

@@ -20,9 +20,11 @@ public class UserProject {
     private String mark;
     @Column(name = "completion_date")
     private LocalDateTime completionDateTime;
+    @Column(name = "datetime_of_project_selection")
     private LocalDateTime datetimeOfProjectSelection;
     private String programmingLanguage;
     private String technologies;
+    @Column(name = "`database`")
     private String database;
     private String additionalInformation;
     private String repositoryLink;
