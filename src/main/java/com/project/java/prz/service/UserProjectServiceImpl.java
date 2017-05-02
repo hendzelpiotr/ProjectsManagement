@@ -6,6 +6,7 @@ import com.project.java.prz.domain.User;
 import com.project.java.prz.domain.UserProject;
 import com.project.java.prz.dto.UserProjectDTO;
 import com.project.java.prz.exception.ProjectException;
+import com.project.java.prz.exception.UserProjectException;
 import com.project.java.prz.mapper.UserProjectMapper;
 import com.project.java.prz.repository.ProjectRepository;
 import com.project.java.prz.repository.UserProjectRepository;
@@ -17,7 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.java.prz.exception.ProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT;
+import static com.project.java.prz.exception.UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT;
 
 /**
  * Created by Piotr on 17.04.2017.
@@ -69,7 +70,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
             return UserProjectMapper.INSTANCE.convertToDTO(userProject);
         } else {
-            throw new ProjectException(ProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
+            throw new UserProjectException(UserProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
         }
     }
 
@@ -84,7 +85,24 @@ public class UserProjectServiceImpl implements UserProjectService {
 
         if (isAdmin(user) || isPossibleToRemove(id, user)) {
             userProjectRepository.delete(id);
-        } else throw new ProjectException(YOU_CAN_NOT_ABANDON_PROJECT);
+        } else throw new UserProjectException(YOU_CAN_NOT_ABANDON_PROJECT);
+    }
+
+    @Override
+    public UserProjectDTO fillNecessaryInformation(String login, UserProjectDTO userProjectDTO) {
+        User user = userRepository.findByLogin(login);
+        UserProject userProject = user.getUserProject();
+
+        if (userProject.getId() == userProjectDTO.getId()) {
+            userProjectDTO.setMark(userProject.getMark());
+            userProjectDTO.setDatetimeOfProjectSelection(userProject.getDatetimeOfProjectSelection());
+            userProjectDTO.getProjectDTO().setDescription(userProject.getProject().getDescription());
+            userProjectDTO.getProjectDTO().setName(userProject.getProject().getName());
+
+            UserProject updatedUserProject = userProjectRepository.save(UserProjectMapper.INSTANCE.convertToEntity(userProjectDTO));
+            return UserProjectMapper.INSTANCE.convertToDTO(updatedUserProject);
+        }
+        throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
     }
 
     private boolean isAdmin(User user) {
@@ -94,10 +112,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private boolean isPossibleToRemove(Integer id, User user) {
         UserProject userProject = user.getUserProject();
 
-        if (id == userProject.getId() && userProject.getCompletionDateTime() != null)
-            return true;
-
-        return false;
+        return id == userProject.getId() && userProject.getCompletionDateTime() != null;
     }
 
 }

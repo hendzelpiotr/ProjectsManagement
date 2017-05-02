@@ -13,5 +13,6 @@ public interface UserProjectService {
     UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login);
     UserProjectDTO assignProjectToStudent(String login, Integer projectId);
     void deleteById(String login, Integer id);
+    UserProjectDTO fillNecessaryInformation(String login, UserProjectDTO userProjectDTO);
 
 }

@@ -3,7 +3,9 @@ package com.project.java.prz.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,11 +21,13 @@ public class UserProjectDTO {
 
     private Integer id;
     private String mark;
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonFormat(pattern="MM/dd/yyyy hh:mm")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern="MM/dd/yyyy HH:mm")
     private LocalDateTime completionDateTime;
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonFormat(pattern="MM/dd/yyyy hh:mm")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern="MM/dd/yyyy HH:mm")
     private LocalDateTime datetimeOfProjectSelection;
     private String programmingLanguage;
     private String technologies;
