@@ -43,7 +43,10 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
-        return UserProjectMapper.INSTANCE.convertToDTO(userProjectRepository.findByUserLogin(login));
+        UserProject userProject = userProjectRepository.findByUserLogin(login);
+        if (userProject != null) {
+            return UserProjectMapper.INSTANCE.convertToDTO(userProject);
+        } else throw new UserProjectException(UserProjectException.FailReason.USER_PROJECT_NOT_FOUND);
     }
 
     @Override
@@ -112,7 +115,13 @@ public class UserProjectServiceImpl implements UserProjectService {
     private boolean isPossibleToRemove(Integer id, User user) {
         UserProject userProject = user.getUserProject();
 
-        return id == userProject.getId() && userProject.getCompletionDateTime() != null;
+        return id == userProject.getId()
+                && userProject.getCompletionDateTime() == null
+                && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+    }
+
+    private boolean lessThanTwoWeeks(LocalDateTime selectionDatetime) {
+        return selectionDatetime.isBefore(selectionDatetime.plusDays(14));
     }
 
 }

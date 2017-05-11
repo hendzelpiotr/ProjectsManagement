@@ -23,6 +23,8 @@ public class UserProjectExceptionHandler extends BaseExceptionHandler {
             case YOU_CAN_NOT_UPDATE_USER_PROJECT:
             case INVALID_IDS:
                 return returnApiResponseError(userProjectException, HttpStatus.BAD_REQUEST);
+            case USER_PROJECT_NOT_FOUND:
+                return returnApiResponseError(userProjectException, HttpStatus.NOT_FOUND);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

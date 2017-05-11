@@ -18,7 +18,7 @@ public class UserProjectException extends BaseException {
         YOU_ALREADY_CHOSE_PROJECT,
         YOU_CAN_NOT_UPDATE_USER_PROJECT,
         INVALID_IDS,
-        YOU_CAN_NOT_ABANDON_PROJECT
+        USER_PROJECT_NOT_FOUND, YOU_CAN_NOT_ABANDON_PROJECT
     }
 
 }
