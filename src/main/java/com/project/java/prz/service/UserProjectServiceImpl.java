@@ -120,8 +120,4 @@ public class UserProjectServiceImpl implements UserProjectService {
                 && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
     }
 
-    private boolean lessThanTwoWeeks(LocalDateTime selectionDatetime) {
-        return selectionDatetime.isBefore(selectionDatetime.plusDays(14));
-    }
-
 }
