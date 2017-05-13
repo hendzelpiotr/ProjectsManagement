@@ -34,7 +34,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
-        User user = userRepository.findByLogin(login);
+        User user = getUser(login);
         String directoryPath;
 
         directoryPath = createUserDirectoryPathAsString(user);
@@ -44,6 +44,21 @@ public class FileServiceImpl implements FileService {
         Files.write(path, fileAsByteArray);
 
         updateSourceFileUploadedFlag(user.getUserProject());
+    }
+
+    @Override
+    public byte[] readZipFile(String login) throws IOException {
+        User user = getUser(login);
+
+        String directoryPath = createUserDirectoryPathAsString(user);
+        makeSureThatDirectoryExist(directoryPath);
+
+        Path path = Paths.get(createFilePathAsString("zip", user, directoryPath));
+        return Files.readAllBytes(path);
+    }
+
+    private User getUser(String login) {
+        return userRepository.findByLogin(login);
     }
 
     private void updateSourceFileUploadedFlag(UserProject userProject) {

@@ -8,5 +8,6 @@ import java.io.IOException;
 public interface FileService {
 
     void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException;
+    byte[] readZipFile(String login) throws IOException;
 
 }

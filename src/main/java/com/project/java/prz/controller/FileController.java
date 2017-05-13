@@ -4,8 +4,6 @@ import com.project.java.prz.exception.GeneralException;
 import com.project.java.prz.service.FileService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 
 /**
@@ -45,19 +40,15 @@ public class FileController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<byte[]> getDownloadData() throws Exception {
+    @GetMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> getDownloadData(Principal principal) throws Exception {
 
-        Path path = Paths.get("C:\\2\\Kamila_Gracik\\kgracik.zip");
-        byte[] data = Files.readAllBytes(path);
+        byte[] data = fileService.readZipFile(principal.getName());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("charset", "utf-8");
-        responseHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
-        responseHeaders.setContentLength(data.length);
-        responseHeaders.set("Content-disposition", "attachment;");
-
-        return new ResponseEntity<byte[]>(data, responseHeaders, HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .header("Filename", principal.getName() + ".zip")
+                .body(data);
     }
 
 }
