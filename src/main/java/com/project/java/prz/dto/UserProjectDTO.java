@@ -34,6 +34,7 @@ public class UserProjectDTO {
     private String database;
     private String additionalInformation;
     private String repositoryLink;
+    private Boolean sourceFilesUploaded;
     private UserDTO userDTO;
     private ProjectDTO projectDTO;
 

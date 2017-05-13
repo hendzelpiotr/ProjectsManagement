@@ -1,6 +1,6 @@
 package com.project.java.prz.handler;
 
-import com.project.java.prz.exception.ProjectException;
+import com.project.java.prz.exception.GeneralException;
 import com.project.java.prz.exception.pattern.ApiResponseError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,20 +9,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by Piotr on 13.04.2017.
+ * Created by Piotr on 13.05.2017.
  */
 @ControllerAdvice
-public class ProjectExceptionHandler implements BaseExceptionHandler<ProjectException> {
+public class GeneralExceptionHandler implements BaseExceptionHandler<GeneralException> {
 
     @Override
     @ResponseBody
-    @ExceptionHandler(value = ProjectException.class)
-    public ResponseEntity<ApiResponseError> handleException(ProjectException e) {
+    @ExceptionHandler(value = GeneralException.class)
+    public ResponseEntity<ApiResponseError> handleException(GeneralException e) {
         switch (e.getFailReason()) {
-            case PROJECT_DOES_NOT_EXIST:
-                return returnApiResponseError(e, HttpStatus.NOT_FOUND);
+            case IO_EXCEPTION:
+                return returnApiResponseError(e, HttpStatus.INTERNAL_SERVER_ERROR);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

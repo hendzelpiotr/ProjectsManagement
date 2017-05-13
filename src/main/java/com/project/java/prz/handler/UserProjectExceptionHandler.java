@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created by Piotr on 13.04.2017.
  */
 @ControllerAdvice
-public class UserProjectExceptionHandler extends BaseExceptionHandler {
+public class UserProjectExceptionHandler implements BaseExceptionHandler<UserProjectException> {
 
-    @ExceptionHandler(value = UserProjectException.class)
+    @Override
     @ResponseBody
-    public ResponseEntity<ApiResponseError> projectException(UserProjectException userProjectException) {
-        switch (userProjectException.getFailReason()) {
+    @ExceptionHandler(value = UserProjectException.class)
+    public ResponseEntity<ApiResponseError> handleException(UserProjectException e) {
+        switch (e.getFailReason()) {
             case YOU_ALREADY_CHOSE_PROJECT:
             case YOU_CAN_NOT_ABANDON_PROJECT:
             case YOU_CAN_NOT_UPDATE_USER_PROJECT:
             case INVALID_IDS:
-                return returnApiResponseError(userProjectException, HttpStatus.BAD_REQUEST);
+                return returnApiResponseError(e, HttpStatus.BAD_REQUEST);
             case USER_PROJECT_NOT_FOUND:
-                return returnApiResponseError(userProjectException, HttpStatus.NOT_FOUND);
+                return returnApiResponseError(e, HttpStatus.NOT_FOUND);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

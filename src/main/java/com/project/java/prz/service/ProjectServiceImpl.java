@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by phendzel on 06.04.2017.
  */
-@Transactional
 @Service
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
