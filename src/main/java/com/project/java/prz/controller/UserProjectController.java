@@ -48,9 +48,18 @@ public class UserProjectController {
     public ResponseEntity<UserProjectDTO> fillNecessaryInformation(@PathVariable("id") Integer id,
                                                                    @RequestBody UserProjectDTO userProjectDTO,
                                                                    Principal principal) {
-        if (id == userProjectDTO.getId()) {
+        if (id.equals(userProjectDTO.getId())) {
             UserProjectDTO updatedUserProjectDTO = userProjectService.fillNecessaryInformation(principal.getName(), userProjectDTO);
             return ResponseEntity.ok(updatedUserProjectDTO);
+        } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
+    }
+
+    @PutMapping("/{id}/marks")
+    public ResponseEntity<UserProjectDTO> markUserProject(@PathVariable("id") Integer id,
+                                                          @RequestBody UserProjectDTO userProjectDTO,
+                                                          Principal principal) {
+        if (id.equals(userProjectDTO.getId())) {
+            return null;
         } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
     }
 
