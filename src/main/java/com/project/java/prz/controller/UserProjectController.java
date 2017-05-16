@@ -45,11 +45,11 @@ public class UserProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserProjectDTO> fillNecessaryInformation(@PathVariable("id") Integer id,
-                                                                   @RequestBody UserProjectDTO userProjectDTO,
-                                                                   Principal principal) {
+    public ResponseEntity<UserProjectDTO> update(@PathVariable("id") Integer id,
+                                                 @RequestBody UserProjectDTO userProjectDTO,
+                                                 Principal principal) {
         if (id.equals(userProjectDTO.getId())) {
-            UserProjectDTO updatedUserProjectDTO = userProjectService.fillNecessaryInformation(principal.getName(), userProjectDTO);
+            UserProjectDTO updatedUserProjectDTO = userProjectService.update(principal.getName(), userProjectDTO);
             return ResponseEntity.ok(updatedUserProjectDTO);
         } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
     }

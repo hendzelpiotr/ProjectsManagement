@@ -92,20 +92,52 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     @Override
-    public UserProjectDTO fillNecessaryInformation(String login, UserProjectDTO userProjectDTO) {
+    public UserProjectDTO update(String login, UserProjectDTO userProjectDTO) {
         User user = userRepository.findByLogin(login);
-        UserProject userProject = user.getUserProject();
+        UserProject userProject = new UserProject();
 
-        if (userProject.getId() == userProjectDTO.getId()) {
-            userProjectDTO.setMark(userProject.getMark());
-            userProjectDTO.setDatetimeOfProjectSelection(userProject.getDatetimeOfProjectSelection());
-            userProjectDTO.getProjectDTO().setDescription(userProject.getProject().getDescription());
-            userProjectDTO.getProjectDTO().setName(userProject.getProject().getName());
-
-            UserProject updatedUserProject = userProjectRepository.save(UserProjectMapper.INSTANCE.convertToEntity(userProjectDTO));
-            return UserProjectMapper.INSTANCE.convertToDTO(updatedUserProject);
+        switch (user.getRole().getName()) {
+            case ROLE_ADMIN:
+                userProject = prepareToUpdateByAdmin(userProjectDTO);
+                break;
+            case ROLE_STUDENT:
+                userProject = user.getUserProject();
+                if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
+                    userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
+                } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
+                break;
         }
-        throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
+
+        UserProject updatedUserProject = userProjectRepository.save(userProject);
+        return UserProjectMapper.INSTANCE.convertToDTO(updatedUserProject);
+    }
+
+    private UserProject prepareToUpdateByStudent(UserProjectDTO dto, UserProject dbUserProject) {
+        if (!dbUserProject.isReadyToGrade()) {
+            dbUserProject.setProgrammingLanguage(dto.getProgrammingLanguage());
+            dbUserProject.setTechnologies(dto.getTechnologies());
+            dbUserProject.setDatabase(dto.getDatabase());
+            dbUserProject.setRepositoryLink(dto.getRepositoryLink());
+            dbUserProject.setAdditionalInformation(dto.getAdditionalInformation());
+            dbUserProject.setSourceFilesUploaded(dto.isSourceFilesUploaded());
+        } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
+
+        if (dto.isReadyToGrade() && !dbUserProject.isReadyToGrade()) {
+            if (checkWhetherUserProjectIsReadyToGrade(dbUserProject)) {
+                dbUserProject.setReadyToGrade(dto.isReadyToGrade());
+                dbUserProject.setCompletionDateTime(LocalDateTime.now());
+            } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
+        }
+
+        return dbUserProject;
+    }
+
+    private Boolean checkWhetherUserProjectIsReadyToGrade(UserProject userProject) {
+        return userProject.isSourceFilesUploaded() && userProject.getTechnologies() != null && userProject.getProgrammingLanguage() != null;
+    }
+
+    private UserProject prepareToUpdateByAdmin(UserProjectDTO dto) {
+        return UserProjectMapper.INSTANCE.convertToEntity(dto);
     }
 
     private boolean isAdmin(User user) {

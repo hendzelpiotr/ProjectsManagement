@@ -28,7 +28,8 @@ public class UserProject {
     private String database;
     private String additionalInformation;
     private String repositoryLink;
-    private Boolean sourceFilesUploaded;
+    private boolean sourceFilesUploaded;
+    private boolean readyToGrade;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

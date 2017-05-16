@@ -34,7 +34,8 @@ public class UserProjectDTO {
     private String database;
     private String additionalInformation;
     private String repositoryLink;
-    private Boolean sourceFilesUploaded;
+    private boolean sourceFilesUploaded;
+    private boolean readyToGrade;
     private UserDTO userDTO;
     private ProjectDTO projectDTO;
 
