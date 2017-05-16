@@ -54,13 +54,4 @@ public class UserProjectController {
         } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
     }
 
-    @PutMapping("/{id}/marks")
-    public ResponseEntity<UserProjectDTO> markUserProject(@PathVariable("id") Integer id,
-                                                          @RequestBody UserProjectDTO userProjectDTO,
-                                                          Principal principal) {
-        if (id.equals(userProjectDTO.getId())) {
-            return null;
-        } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
-    }
-
 }
