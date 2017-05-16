@@ -147,7 +147,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private boolean isPossibleToRemove(Integer id, User user) {
         UserProject userProject = user.getUserProject();
 
-        return id == userProject.getId()
+        return id.equals(userProject.getId())
                 && userProject.getCompletionDateTime() == null
                 && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
     }
