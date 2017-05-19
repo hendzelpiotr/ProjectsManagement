@@ -1,4 +1,4 @@
-package com.project.java.prz.fileservice.configuration;
+package com.project.java.prz.file.configuration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

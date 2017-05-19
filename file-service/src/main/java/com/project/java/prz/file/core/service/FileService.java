@@ -1,4 +1,4 @@
-package com.project.java.prz.fileservice.core.service;
+package com.project.java.prz.file.core.service;
 
 import java.io.IOException;
 
