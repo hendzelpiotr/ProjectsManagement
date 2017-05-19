@@ -29,7 +29,7 @@
         <commons.io.version>2.5</commons.io.version>
         <junit.platform.provider>1.0.0-M4</junit.platform.provider>
         <junit.engine.version>5.0.0-M4</junit.engine.version>
-        <maven.surefire.plugin>2.19</maven.surefire.plugin>
+        <maven.surefire.plugin>2.20</maven.surefire.plugin>
         <lombok.version>1.16.16</lombok.version>
     </properties>
 
@@ -73,6 +73,10 @@
         </dependency>
 
         <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
  * Created by phendzel on 5/19/2017.
  */
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class UserProjectServiceImplTest {
 
     private final Integer USER_PROJECT_ID = 1;
@@ -33,9 +34,8 @@ public class UserProjectServiceImplTest {
     @Mock
     private UserProjectRepository userProjectRepository;
 
-    @Autowired
     @InjectMocks
-    private UserProjectService userProjectService;
+    private UserProjectService userProjectService = new UserProjectServiceImpl();
 
     @Test
     void getAll() throws Exception {
