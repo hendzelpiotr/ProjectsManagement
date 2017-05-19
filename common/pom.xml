@@ -28,7 +28,6 @@
             <artifactId>validation-api</artifactId>
             <version>${javax.validation.version}</version>
         </dependency>
-
         <!-- mapper -->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -40,7 +39,6 @@
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- others -->
         <dependency>
             <groupId>org.projectlombok</groupId>
