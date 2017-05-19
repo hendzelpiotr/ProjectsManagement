@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Created by phendzel on 5/16/2017.
+ * Created by phendzel on 5/19/2017.
  */
 @ExtendWith(MockitoExtension.class)
 public class UserProjectServiceImplTest {
