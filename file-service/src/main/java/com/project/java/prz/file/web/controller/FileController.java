@@ -25,7 +25,9 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file, Principal principal) {
+    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file,
+                                     @RequestHeader(value="X-AUTH-TOKEN") String authToken,
+                                     Principal principal) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -41,7 +43,7 @@ public class FileController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> getDownloadData(Principal principal) throws Exception {
+    public ResponseEntity<byte[]> getDownloadData(Principal principal, @RequestHeader(value="X-AUTH-TOKEN") String authToken) throws IOException {
 
         byte[] data = fileService.readZipFile(principal.getName());
 
