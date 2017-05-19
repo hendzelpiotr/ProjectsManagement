@@ -1,7 +1,7 @@
 package com.project.java.prz.security.service;
 
-import com.project.java.prz.domain.User;
-import com.project.java.prz.repository.UserRepository;
+import com.project.java.prz.core.domain.User;
+import com.project.java.prz.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

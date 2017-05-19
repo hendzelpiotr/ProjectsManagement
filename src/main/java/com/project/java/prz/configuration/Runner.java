@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(scanBasePackages = "com.project.java.prz")
-@EnableJpaRepositories(basePackages = "com.project.java.prz.repository")
+@EnableJpaRepositories(basePackages = "com.project.java.prz.core.repository")
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.project.java.prz.domain")
 public class Runner {

@@ -29,6 +29,7 @@
         <commons.io.version>2.5</commons.io.version>
         <junit.platform.provider>1.0.0-M4</junit.platform.provider>
         <junit.engine.version>5.0.0-M4</junit.engine.version>
+        <maven.surefire.plugin>2.19</maven.surefire.plugin>
     </properties>
 
     <dependencies>
@@ -120,7 +121,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
+                <version>${maven.surefire.plugin}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
