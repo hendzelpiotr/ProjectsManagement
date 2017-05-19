@@ -15,12 +15,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <org.mapstruct.version>1.1.0.Final</org.mapstruct.version>
         <flyway.version>4.1.2</flyway.version>
         <json.web.token.version>0.7.0</json.web.token.version>
         <junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
         <mockito.all.version>2.0.2-beta</mockito.all.version>
-        <jackson.version>2.9.0.pr2</jackson.version>
         <commons.io.version>2.5</commons.io.version>
         <junit.platform.provider>1.0.0-M4</junit.platform.provider>
         <junit.engine.version>5.0.0-M4</junit.engine.version>
@@ -77,28 +75,17 @@
             <version>${mockito.all.version}</version>
         </dependency>
 
-        <!-- mapper -->
+        <!-- own -->
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${org.mapstruct.version}</version>
-            <scope>provided</scope>
+            <groupId>com.java.prz</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- others -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

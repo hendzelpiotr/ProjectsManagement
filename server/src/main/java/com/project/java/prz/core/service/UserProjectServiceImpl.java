@@ -18,8 +18,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.java.prz.core.exception.UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT;
-
 /**
  * Created by Piotr on 17.04.2017.
  */
@@ -88,7 +86,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
         if (isAdmin(user) || isPossibleToRemove(id, user)) {
             userProjectRepository.delete(id);
-        } else throw new UserProjectException(FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
+        } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
     }
 
     @Override

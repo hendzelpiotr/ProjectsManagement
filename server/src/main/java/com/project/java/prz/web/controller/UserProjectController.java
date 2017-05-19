@@ -2,7 +2,7 @@ package com.project.java.prz.web.controller;
 
 import com.project.java.prz.core.dto.UserProjectDTO;
 import com.project.java.prz.core.exception.UserProjectException;
-import com.project.java.prz.service.UserProjectService;
+import com.project.java.prz.core.service.UserProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

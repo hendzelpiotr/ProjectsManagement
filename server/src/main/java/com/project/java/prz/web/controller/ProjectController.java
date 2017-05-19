@@ -1,7 +1,7 @@
 package com.project.java.prz.web.controller;
 
 import com.project.java.prz.core.dto.ProjectDTO;
-import com.project.java.prz.service.ProjectService;
+import com.project.java.prz.core.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
