@@ -8,8 +8,9 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>server</module>
+        <module>core-server</module>
         <module>common</module>
+        <module>authentication-server</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -22,7 +23,35 @@
     </parent>
 
     <properties>
+        <!-- java -->
+        <java.version>1.8</java.version>
+        <javax.validation.version>2.0.0.Beta1</javax.validation.version>
+
+        <!-- spring -->
+
+        <!-- security -->
+        <oauth.version>2.0.10.RELEASE</oauth.version>
+        <json.web.token.version>0.7.0</json.web.token.version>
+
+        <!-- database -->
+        <flyway.version>4.1.2</flyway.version>
+
+        <!-- test -->
+        <junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
+        <mockito.all.version>2.0.2-beta</mockito.all.version>
+        <junit.platform.provider>1.0.0-M4</junit.platform.provider>
+        <junit.engine.version>5.0.0-M4</junit.engine.version>
+
+        <!-- mapper -->
+        <mapstruct.version>1.2.0.Beta2</mapstruct.version>
+
+        <!-- own -->
         <com.java.prz.common.version>0.0.1-SNAPSHOT</com.java.prz.common.version>
+
+        <!-- others -->
+        <commons.io.version>2.5</commons.io.version>
+        <jackson.version>2.9.0.pr2</jackson.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 
     <dependencyManagement>
