@@ -1,7 +1,7 @@
-package com.project.java.prz.file.web.controller;
+package com.project.java.prz.server.web.controller;
 
-import com.project.java.prz.file.core.service.FileService;
 import com.project.java.prz.common.core.exception.GeneralException;
+import com.project.java.prz.server.core.service.FileService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

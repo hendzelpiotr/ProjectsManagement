@@ -19,6 +19,7 @@
         <mockito.all.version>2.0.2-beta</mockito.all.version>
         <junit.platform.provider>1.0.0-M4</junit.platform.provider>
         <junit.engine.version>5.0.0-M4</junit.engine.version>
+        <commons.io.version>2.5</commons.io.version>
     </properties>
 
     <dependencies>
@@ -76,6 +77,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
         </dependency>
     </dependencies>
 

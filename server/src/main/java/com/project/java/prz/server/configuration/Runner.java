@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(scanBasePackages = "com.project.java.prz")
 @EnableJpaRepositories(basePackages = "com.project.java.prz.server.core.repository")
 @EnableTransactionManagement
-@EntityScan(basePackages = "com.project.java.prz.core.domain")
+@EntityScan(basePackages = "com.project.java.prz.common.core.domain")
 public class Runner {
 
     public static void main(String[] args) {

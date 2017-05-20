@@ -9,7 +9,6 @@
 
     <modules>
         <module>server</module>
-        <module>file-service</module>
         <module>common</module>
     </modules>
 
@@ -23,36 +22,16 @@
     </parent>
 
     <properties>
-        <jackson.version>2.9.0.pr2</jackson.version>
-        <org.mapstruct.version>1.1.0.Final</org.mapstruct.version>
         <com.java.prz.common.version>0.0.1-SNAPSHOT</com.java.prz.common.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- mapper -->
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
-                <version>${org.mapstruct.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-processor</artifactId>
-                <version>${org.mapstruct.version}</version>
-                <scope>provided</scope>
-            </dependency>
             <!-- own -->
             <dependency>
                 <groupId>com.java.prz</groupId>
                 <artifactId>common</artifactId>
                 <version>${com.java.prz.common.version}</version>
-            </dependency>
-            <!-- others -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
