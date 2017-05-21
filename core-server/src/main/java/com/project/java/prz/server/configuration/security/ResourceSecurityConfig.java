@@ -18,8 +18,6 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
-import javax.sql.DataSource;
-
 /**
  * Created by Piotr on 20.05.2017.
  */
@@ -32,8 +30,11 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().authorizeRequests()
-                .anyRequest().permitAll();
+        http.
+                sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
+                .authorizeRequests().anyRequest().permitAll();
     }
 
     @Override
@@ -50,18 +51,13 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public TokenStore tokenStore() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
         dataSource.setUrl(env.getProperty("jdbc.url"));
         dataSource.setUsername(env.getProperty("jdbc.user"));
         dataSource.setPassword(env.getProperty("jdbc.pass"));
-        return dataSource;
-    }
-
-    @Bean
-    public TokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource());
+        return new JdbcTokenStore(dataSource);
     }
 
     @Bean

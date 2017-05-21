@@ -1,6 +1,5 @@
 package com.project.java.prz.oauth.security;
 
-import com.project.java.prz.oauth.filter.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,14 +19,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by Piotr on 20.05.2017.
@@ -61,10 +56,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Collections.singletonList(tokenEnhancer()));
         endpoints.tokenStore(tokenStore())
-                .tokenEnhancer(tokenEnhancerChain)
                 .authenticationManager(authenticationManager);
     }
 
@@ -78,12 +70,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     }
 
     @Bean
-    public TokenEnhancer tokenEnhancer() {
-        return new CustomTokenEnhancer();
-    }
-
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(@Qualifier("CustomDataSource") final DataSource dataSource) {
+    public DataSourceInitializer dataSourceInitializer(@Qualifier("customDataSource") final DataSource dataSource) {
         final DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
         initializer.setDatabasePopulator(databasePopulator());
@@ -97,7 +84,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
         return populator;
     }
 
-    @Bean(name = "CustomDataSource")
+    @Bean(name = "customDataSource")
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
