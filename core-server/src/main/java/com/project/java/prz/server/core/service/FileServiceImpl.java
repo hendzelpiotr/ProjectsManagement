@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(createFilePathAsString(extension, user, directoryPath));
         Files.write(path, fileAsByteArray);
 
-        updateSourceFileUploadedFlag(user.getUserProject());
+        //updateSourceFileUploadedFlag(user.getUserProject());
     }
 
     @Override

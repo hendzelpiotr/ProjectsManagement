@@ -19,3 +19,8 @@ INSERT INTO oauth_client_details
 VALUES
 	("barClientIdPassword", "secret", "bar,read,write",
 	"password,authorization_code,refresh_token", null, null, 36000, 36000, null, true);
+INSERT INTO role (name)
+VALUES ('ROLE_ADMIN'), ('ROLE_STUDENT');
+
+INSERT INTO user (login, password, name, surname, role_id, enabled)
+VALUES ('adminprz', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Piotr', 'Hendzel', 1, 1);

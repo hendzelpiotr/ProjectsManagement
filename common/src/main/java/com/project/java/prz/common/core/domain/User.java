@@ -1,6 +1,5 @@
 package com.project.java.prz.common.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,8 +36,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-    @OneToOne(mappedBy = "user")
-    @JsonIgnore
-    private UserProject userProject;
+//    @OneToOne(mappedBy = "user")
+//    @JsonIgnore
+//    private UserProject userProject;
 
 }

@@ -56,23 +56,24 @@ public class UserProjectServiceImpl implements UserProjectService {
 
         Integer availableProjectsCounter = project.getAvailableProjectsCounter();
 
-        if (user.getUserProject() == null
-                && (availableProjectsCounter == null || availableProjectsCounter > 0)) {
-            UserProject userProject = new UserProject();
-            userProject.setProject(project);
-            userProject.setUser(user);
-            userProject.setDatetimeOfProjectSelection(LocalDateTime.now());
-            userProject = userProjectRepository.save(userProject);
-
-            if (availableProjectsCounter != null) {
-                project.setAvailableProjectsCounter(availableProjectsCounter - 1);
-                projectRepository.save(project);
-            }
-
-            return UserProjectMapper.INSTANCE.convertToDTO(userProject);
-        } else {
-            throw new UserProjectException(UserProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
-        }
+//        if (user.getUserProject() == null
+//                && (availableProjectsCounter == null || availableProjectsCounter > 0)) {
+//            UserProject userProject = new UserProject();
+//            userProject.setProject(project);
+//            userProject.setUser(user);
+//            userProject.setDatetimeOfProjectSelection(LocalDateTime.now());
+//            userProject = userProjectRepository.save(userProject);
+//
+//            if (availableProjectsCounter != null) {
+//                project.setAvailableProjectsCounter(availableProjectsCounter - 1);
+//                projectRepository.save(project);
+//            }
+//
+//            return UserProjectMapper.INSTANCE.convertToDTO(userProject);
+//        } else {
+//            throw new UserProjectException(UserProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
+//        }
+    return null;
     }
 
     private void isExisting(Project project) {
@@ -84,9 +85,9 @@ public class UserProjectServiceImpl implements UserProjectService {
     public void deleteById(String login, Integer id) {
         User user = userRepository.findByLogin(login);
 
-        if (isAdmin(user) || isPossibleToRemove(id, user)) {
-            userProjectRepository.delete(id);
-        } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
+//        if (isAdmin(user) || isPossibleToRemove(id, user)) {
+//            userProjectRepository.delete(id);
+//        } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                 userProject = prepareToUpdateByAdmin(userProjectDTO);
                 break;
             case ROLE_STUDENT:
-                userProject = user.getUserProject();
+                //userProject = user.getUserProject();
                 if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
                     userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
                 } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
@@ -142,12 +143,12 @@ public class UserProjectServiceImpl implements UserProjectService {
         return RoleType.ROLE_ADMIN.equals(user.getRole().getName());
     }
 
-    private boolean isPossibleToRemove(Integer id, User user) {
-        UserProject userProject = user.getUserProject();
-
-        return id.equals(userProject.getId())
-                && userProject.getCompletionDateTime() == null
-                && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
-    }
+//    private boolean isPossibleToRemove(Integer id, User user) {
+//        ///UserProject userProject = user.getUserProject();
+//
+//        return id.equals(userProject.getId())
+//                && userProject.getCompletionDateTime() == null
+//                && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+//    }
 
 }
