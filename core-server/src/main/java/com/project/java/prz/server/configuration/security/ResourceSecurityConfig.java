@@ -39,8 +39,8 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
     public ResourceServerTokenServices tokenServices() {
         final RemoteTokenServices tokenServices = new RemoteTokenServices();
         tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
-        tokenServices.setClientId("barClientIdPassword");
-        tokenServices.setClientSecret("secret");
+        tokenServices.setClientId("ResourceServer_PRZ_2017");
+        tokenServices.setClientSecret("zaq1@WSXzaq1@WSX");
         return tokenServices;
     }
 

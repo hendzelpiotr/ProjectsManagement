@@ -42,7 +42,7 @@ public class FileController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("#oauth2.hasScope('bar') and #oauth2.hasScope('read')")
+    @PreAuthorize("#oauth2.hasScope('read')")
     @GetMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> getDownloadData(Principal principal) throws IOException {
 
