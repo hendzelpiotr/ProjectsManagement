@@ -12,7 +12,7 @@ public interface UserHttpClient {
     User getOne(String login);
     List<User> getAll();
     User post(User user);
-    User put(User user);
+    User put(User user, Integer id);
     void delete(Integer id);
 
 }

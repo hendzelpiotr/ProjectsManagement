@@ -3,6 +3,8 @@ package com.project.java.prz.server.core.http;
 import com.project.java.prz.common.core.domain.security.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +40,7 @@ public class UserHttpClientImpl implements UserHttpClient {
     }
 
     @Override
-    public User put(User user) {
+    public User put(User user, Integer id) {
         httpClient().put(getUrl(), user);
         return getOne(user.getLogin());
     }
@@ -50,7 +52,13 @@ public class UserHttpClientImpl implements UserHttpClient {
 
     private RestTemplate httpClient() {
         RestTemplateBuilder builder = new RestTemplateBuilder();
-        return builder.build();
+        RestTemplate restClient = builder.build();
+        restClient.getInterceptors().add((request, body, execution) -> {
+            ClientHttpResponse response = execution.execute(request, body);
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+            return response;
+        });
+        return restClient;
     }
 
     private String getUrl() {
