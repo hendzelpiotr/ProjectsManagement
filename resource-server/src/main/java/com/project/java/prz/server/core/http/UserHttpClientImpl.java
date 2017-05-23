@@ -1,6 +1,7 @@
 package com.project.java.prz.server.core.http;
 
 import com.project.java.prz.common.core.domain.security.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -13,9 +14,15 @@ import java.util.List;
 @Component
 public class UserHttpClientImpl implements UserHttpClient {
 
+    @Value("${url.domain}")
+    private String domain;
+
+    @Value("${url.context}")
+    private String context;
+
     @Override
     public User getOne(String login) {
-        return httpClient().getForObject("http://localhost:8083/internal-api/users/kdsadsa", User.class);
+        return httpClient().getForObject(getUrl() + login, User.class);
     }
 
     @Override
@@ -41,6 +48,10 @@ public class UserHttpClientImpl implements UserHttpClient {
     private RestTemplate httpClient() {
         RestTemplateBuilder builder = new RestTemplateBuilder();
         return builder.build();
+    }
+
+    private String getUrl() {
+        return domain + context;
     }
 
 }
