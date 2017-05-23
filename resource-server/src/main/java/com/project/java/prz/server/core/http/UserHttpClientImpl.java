@@ -6,6 +6,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,22 +28,24 @@ public class UserHttpClientImpl implements UserHttpClient {
 
     @Override
     public List<User> getAll() {
-        return null;
+        User[] response = httpClient().getForObject(getUrl(), User[].class);
+        return Arrays.asList(response);
     }
 
     @Override
     public User post(User user) {
-        return null;
+        return httpClient().postForObject(getUrl(), user, User.class);
     }
 
     @Override
     public User put(User user) {
-        return null;
+        httpClient().put(getUrl(), user);
+        return getOne(user.getLogin());
     }
 
     @Override
     public void delete(Integer id) {
-
+        httpClient().delete(getUrl() + "" + id);
     }
 
     private RestTemplate httpClient() {
