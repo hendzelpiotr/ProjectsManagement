@@ -2,6 +2,7 @@ package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.server.core.http.UserHttpClient;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ import java.nio.file.Paths;
 @Transactional
 public class FileServiceImpl implements FileService {
 
-//    @Autowired
-//    private UserRepository userRepository;
+    @Autowired
+    private UserHttpClient userHttpClient;
 
     @Autowired
     private UserProjectRepository userProjectRepository;
@@ -57,7 +58,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private User getUser(String login) {
-        return null;//userRepository.findByLogin(login);
+        return userHttpClient.getOne(login);
     }
 
     private void updateSourceFileUploadedFlag(UserProject userProject) {

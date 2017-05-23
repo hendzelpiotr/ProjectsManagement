@@ -18,7 +18,6 @@
             <artifactId>spring-security-core</artifactId>
             <version>${security.core.version}</version>
         </dependency>
-
         <!-- database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
