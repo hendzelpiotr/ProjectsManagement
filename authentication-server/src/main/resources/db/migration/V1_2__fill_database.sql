@@ -19,7 +19,7 @@ VALUES
   ('adminprz', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Piotr', 'Hendzel', 1, 1);
 
 INSERT INTO user
-(login, password, name, surname, role_id, laboratory_group, professor_id)
+(login, password, name, surname, role_id, laboratory_group, professor_id, enabled)
 VALUES
-  ('kgracik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Kamila', 'Gracik', 2, 2, 1),
-  ('jsadnik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Jarosław', 'Stadnik', 2, 7, 1);
+  ('kgracik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Kamila', 'Gracik', 2, 2, 1, 1),
+  ('jsadnik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 'Jarosław', 'Stadnik', 2, 7, 1, 1);
