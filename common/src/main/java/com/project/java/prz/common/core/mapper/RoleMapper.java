@@ -1,6 +1,6 @@
 package com.project.java.prz.common.core.mapper;
 
-import com.project.java.prz.common.core.domain.Role;
+import com.project.java.prz.common.core.domain.security.Role;
 import com.project.java.prz.common.core.dto.RoleDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

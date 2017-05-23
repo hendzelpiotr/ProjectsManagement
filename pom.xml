@@ -8,9 +8,10 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>core-server</module>
+        <module>resource-server</module>
         <module>common</module>
         <module>authentication-server</module>
+        <module>user-service</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -32,6 +33,7 @@
         <!-- security -->
         <oauth.version>2.0.10.RELEASE</oauth.version>
         <json.web.token.version>0.7.0</json.web.token.version>
+        <security.core.version>4.2.2.RELEASE</security.core.version>
 
         <!-- database -->
         <flyway.version>4.1.2</flyway.version>

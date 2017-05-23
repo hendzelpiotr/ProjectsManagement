@@ -1,6 +1,6 @@
 package com.project.java.prz.common.core.mapper;
 
-import com.project.java.prz.common.core.domain.UserProject;
+import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

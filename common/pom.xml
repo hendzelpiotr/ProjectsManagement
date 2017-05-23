@@ -12,6 +12,13 @@
     <artifactId>common</artifactId>
 
     <dependencies>
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${security.core.version}</version>
+        </dependency>
+
         <!-- database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
