@@ -5,6 +5,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * Created by phendzel on 5/23/2017.
  */
@@ -14,6 +16,11 @@ public class UserHttpClientImpl implements UserHttpClient {
     @Override
     public User getOne(String login) {
         return httpClient().getForObject("http://localhost:8083/internal-api/users/kdsadsa", User.class);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return null;
     }
 
     @Override
