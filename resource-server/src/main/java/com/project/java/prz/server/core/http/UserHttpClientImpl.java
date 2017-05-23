@@ -1,6 +1,6 @@
 package com.project.java.prz.server.core.http;
 
-import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.common.core.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
@@ -24,25 +24,25 @@ public class UserHttpClientImpl implements UserHttpClient {
     private String context;
 
     @Override
-    public User getOne(String login) {
-        return httpClient().getForObject(getUrl() + login, User.class);
+    public UserDTO getOne(String login) {
+        return httpClient().getForObject(getUrl() + login, UserDTO.class);
     }
 
     @Override
-    public List<User> getAll() {
-        User[] response = httpClient().getForObject(getUrl(), User[].class);
+    public List<UserDTO> getAll() {
+        UserDTO[] response = httpClient().getForObject(getUrl(), UserDTO[].class);
         return Arrays.asList(response);
     }
 
     @Override
-    public User post(User user) {
-        return httpClient().postForObject(getUrl(), user, User.class);
+    public UserDTO post(UserDTO UserDTO) {
+        return httpClient().postForObject(getUrl(), UserDTO, UserDTO.class);
     }
 
     @Override
-    public User put(User user, Integer id) {
-        httpClient().put(getUrl(), user);
-        return getOne(user.getLogin());
+    public UserDTO put(UserDTO UserDTO, Integer id) {
+        httpClient().put(getUrl(), UserDTO);
+        return getOne(UserDTO.getLogin());
     }
 
     @Override

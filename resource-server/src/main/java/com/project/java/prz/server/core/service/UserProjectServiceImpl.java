@@ -3,7 +3,7 @@ package com.project.java.prz.server.core.service;
 import com.project.java.prz.common.core.domain.general.Project;
 import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.domain.security.RoleType;
-import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.common.core.exception.ProjectException;
 import com.project.java.prz.common.core.exception.UserProjectException;
@@ -41,8 +41,8 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
-        User user = userHttpClient.getOne(login);
-        UserProject userProject = userProjectRepository.findByUserId(user.getId());
+        UserDTO userDTO = userHttpClient.getOne(login);
+        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
         if (userProject != null) {
             return UserProjectMapper.INSTANCE.convertToDTO(userProject);
         } else throw new UserProjectException(UserProjectException.FailReason.USER_PROJECT_NOT_FOUND);
@@ -50,19 +50,19 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO assignProjectToStudent(String login, Integer projectId) {
-        User user = userHttpClient.getOne(login);
+        UserDTO userDTO = userHttpClient.getOne(login);
         Project project = projectRepository.getOne(projectId);
 
         isExisting(project);
 
         Integer availableProjectsCounter = project.getAvailableProjectsCounter();
 
-        UserProject userProject = userProjectRepository.findByUserId(user.getId());
+        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
         if (userProject == null
                 && (availableProjectsCounter == null || availableProjectsCounter > 0)) {
             UserProject userProjectToSave = new UserProject();
             userProjectToSave.setProject(project);
-            userProjectToSave.setUserId(user.getId());
+            userProjectToSave.setUserId(userDTO.getId());
             userProjectToSave.setDatetimeOfProjectSelection(LocalDateTime.now());
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
@@ -85,24 +85,24 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public void deleteById(String login, Integer id) {
-        User user = userHttpClient.getOne(login);
+        UserDTO userDTO = userHttpClient.getOne(login);
 
-        if (isAdmin(user) || isPossibleToRemove(id, user)) {
+        if (isAdmin(userDTO) || isPossibleToRemove(id, userDTO)) {
             userProjectRepository.delete(id);
         } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
     }
 
     @Override
     public UserProjectDTO update(String login, UserProjectDTO userProjectDTO) {
-        User user = userHttpClient.getOne(login);
+        UserDTO userDTO = userHttpClient.getOne(login);
         UserProject userProject = new UserProject();
 
-        switch (user.getRole().getName()) {
+        switch (userDTO.getRoleDTO().getName()) {
             case ROLE_ADMIN:
                 userProject = prepareToUpdateByAdmin(userProjectDTO);
                 break;
             case ROLE_STUDENT:
-                userProject = userProjectRepository.findByUserId(user.getId());
+                userProject = userProjectRepository.findByUserId(userDTO.getId());
                 if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
                     userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
                 } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
@@ -141,12 +141,12 @@ public class UserProjectServiceImpl implements UserProjectService {
         return UserProjectMapper.INSTANCE.convertToEntity(dto);
     }
 
-    private boolean isAdmin(User user) {
-        return RoleType.ROLE_ADMIN.equals(user.getRole().getName());
+    private boolean isAdmin(UserDTO userDTO) {
+        return RoleType.ROLE_ADMIN.equals(userDTO.getRoleDTO().getName());
     }
 
-    private boolean isPossibleToRemove(Integer id, User user) {
-        UserProject userProject = userProjectRepository.findByUserId(user.getId());
+    private boolean isPossibleToRemove(Integer id, UserDTO userDTO) {
+        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
 
         return id.equals(userProject.getId())
                 && userProject.getCompletionDateTime() == null

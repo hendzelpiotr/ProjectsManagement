@@ -1,6 +1,6 @@
 package com.project.java.prz.server.core.http;
 
-import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.common.core.dto.UserDTO;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import java.util.List;
  */
 public interface UserHttpClient {
 
-    User getOne(String login);
-    List<User> getAll();
-    User post(User user);
-    User put(User user, Integer id);
+    UserDTO getOne(String login);
+    List<UserDTO> getAll();
+    UserDTO post(UserDTO UserDTO);
+    UserDTO put(UserDTO UserDTO, Integer id);
     void delete(Integer id);
 
 }

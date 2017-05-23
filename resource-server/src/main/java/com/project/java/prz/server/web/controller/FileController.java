@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +17,6 @@ import java.security.Principal;
  * Created by phendzel on 5/12/2017.
  */
 @RestController
-@Component
 @RequestMapping("api/files")
 public class FileController {
 
@@ -26,15 +24,13 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file,
-                                     Principal principal) {
+    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
-            fileService.saveFile(file.getBytes(), FilenameUtils.getExtension(file.getOriginalFilename()),
-                    principal.getName());
+            fileService.saveFile(file.getBytes(), FilenameUtils.getExtension(file.getOriginalFilename()), principal.getName());
         } catch (IOException e) {
             throw new GeneralException(GeneralException.FailReason.IO_EXCEPTION);
         }

@@ -26,7 +26,7 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
                 sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
-                .authorizeRequests().anyRequest().permitAll();
+                .authorizeRequests().anyRequest().authenticated();
     }
 
     @Override

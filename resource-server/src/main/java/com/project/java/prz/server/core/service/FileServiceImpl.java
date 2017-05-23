@@ -1,7 +1,7 @@
 package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.server.core.http.UserHttpClient;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
@@ -34,31 +34,31 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
-        User user = getUser(login);
+        UserDTO userDTO = getUser(login);
         String directoryPath;
 
-        directoryPath = createUserDirectoryPathAsString(user);
+        directoryPath = createUserDirectoryPathAsString(userDTO);
         makeSureThatDirectoryExist(directoryPath);
 
-        Path path = Paths.get(createFilePathAsString(extension, user, directoryPath));
+        Path path = Paths.get(createFilePathAsString(extension, userDTO, directoryPath));
         Files.write(path, fileAsByteArray);
 
-        UserProject userProject = userProjectRepository.findByUserId(user.getId());
+        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
         updateSourceFileUploadedFlag(userProject);
     }
 
     @Override
     public byte[] readZipFile(String login) throws IOException {
-        User user = getUser(login);
+        UserDTO userDTO = getUser(login);
 
-        String directoryPath = createUserDirectoryPathAsString(user);
+        String directoryPath = createUserDirectoryPathAsString(userDTO);
         makeSureThatDirectoryExist(directoryPath);
 
-        Path path = Paths.get(createFilePathAsString("zip", user, directoryPath));
+        Path path = Paths.get(createFilePathAsString("zip", userDTO, directoryPath));
         return Files.readAllBytes(path);
     }
 
-    private User getUser(String login) {
+    private UserDTO getUser(String login) {
         return userHttpClient.getOne(login);
     }
 
@@ -71,12 +71,12 @@ public class FileServiceImpl implements FileService {
         FileUtils.forceMkdir(new File(path));
     }
 
-    private String createUserDirectoryPathAsString(User user) {
-        return destinationPath + user.getLaboratoryGroup() + '\\' + user.getName() + '_' + user.getSurname() + '\\';
+    private String createUserDirectoryPathAsString(UserDTO userDTO) {
+        return destinationPath + userDTO.getLaboratoryGroup() + '\\' + userDTO.getName() + '_' + userDTO.getSurname() + '\\';
     }
 
-    private String createFilePathAsString(String extension, User user, String directoryPath) {
-        return directoryPath + user.getLogin() + "." + extension;
+    private String createFilePathAsString(String extension, UserDTO userDTO, String directoryPath) {
+        return directoryPath + userDTO.getLogin() + "." + extension;
     }
 
 }
