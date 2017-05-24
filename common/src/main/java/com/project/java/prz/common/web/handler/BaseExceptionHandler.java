@@ -1,4 +1,4 @@
-package com.project.java.prz.server.web.handler;
+package com.project.java.prz.common.web.handler;
 
 import com.project.java.prz.common.core.exception.BaseException;
 import com.project.java.prz.common.core.exception.pattern.ApiResponseError;

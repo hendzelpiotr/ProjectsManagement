@@ -1,6 +1,7 @@
 package com.project.java.prz.server.core.http;
 
 import com.project.java.prz.common.core.dto.UserDTO;
+import com.project.java.prz.server.core.http.handler.HttpClientExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class UserHttpClientImpl implements UserHttpClient {
     private String context;
 
     @Override
-    public UserDTO getOne(String login) {
+    public UserDTO getOneByLogin(String login) {
         return httpClient().getForObject(getUrl() + login, UserDTO.class);
     }
 
@@ -32,22 +33,6 @@ public class UserHttpClientImpl implements UserHttpClient {
     public List<UserDTO> getAll() {
         UserDTO[] response = httpClient().getForObject(getUrl(), UserDTO[].class);
         return Arrays.asList(response);
-    }
-
-    @Override
-    public UserDTO post(UserDTO UserDTO) {
-        return httpClient().postForObject(getUrl(), UserDTO, UserDTO.class);
-    }
-
-    @Override
-    public UserDTO put(UserDTO UserDTO, Integer id) {
-        httpClient().put(getUrl(), UserDTO);
-        return getOne(UserDTO.getLogin());
-    }
-
-    @Override
-    public void delete(Integer id) {
-        httpClient().delete(getUrl() + "" + id);
     }
 
     private RestTemplate httpClient() {
@@ -58,6 +43,7 @@ public class UserHttpClientImpl implements UserHttpClient {
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             return response;
         });
+        restClient.setErrorHandler(new HttpClientExceptionHandler());
         return restClient;
     }
 

@@ -2,6 +2,7 @@ package com.project.java.prz.server.web.handler;
 
 import com.project.java.prz.common.core.exception.ProjectException;
 import com.project.java.prz.common.core.exception.pattern.ApiResponseError;
+import com.project.java.prz.common.web.handler.BaseExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

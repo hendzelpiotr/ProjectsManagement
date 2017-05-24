@@ -8,7 +8,6 @@ import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.common.core.exception.ProjectException;
 import com.project.java.prz.common.core.exception.UserProjectException;
 import com.project.java.prz.common.core.mapper.UserProjectMapper;
-import com.project.java.prz.server.core.http.UserHttpClient;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ import java.util.List;
 public class UserProjectServiceImpl implements UserProjectService {
 
     @Autowired
-    private UserHttpClient userHttpClient;
+    private UserService userService;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -41,7 +40,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
-        UserDTO userDTO = userHttpClient.getOne(login);
+        UserDTO userDTO = getUser(login);
         UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
         if (userProject != null) {
             return UserProjectMapper.INSTANCE.convertToDTO(userProject);
@@ -50,7 +49,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO assignProjectToStudent(String login, Integer projectId) {
-        UserDTO userDTO = userHttpClient.getOne(login);
+        UserDTO userDTO = getUser(login);
         Project project = projectRepository.getOne(projectId);
 
         isExisting(project);
@@ -85,7 +84,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public void deleteById(String login, Integer id) {
-        UserDTO userDTO = userHttpClient.getOne(login);
+        UserDTO userDTO = getUser(login);
 
         if (isAdmin(userDTO) || isPossibleToRemove(id, userDTO)) {
             userProjectRepository.delete(id);
@@ -94,7 +93,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public UserProjectDTO update(String login, UserProjectDTO userProjectDTO) {
-        UserDTO userDTO = userHttpClient.getOne(login);
+        UserDTO userDTO = getUser(login);
         UserProject userProject = new UserProject();
 
         switch (userDTO.getRoleDTO().getName()) {
@@ -151,6 +150,10 @@ public class UserProjectServiceImpl implements UserProjectService {
         return id.equals(userProject.getId())
                 && userProject.getCompletionDateTime() == null
                 && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+    }
+
+    private UserDTO getUser(String login) {
+        return userService.getOneByLogin(login);
     }
 
 }

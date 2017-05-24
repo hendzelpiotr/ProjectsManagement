@@ -1,4 +1,4 @@
-package com.project.java.prz.user.repository;
+package com.project.java.prz.user.core.repository;
 
 import com.project.java.prz.common.core.domain.security.User;
 import org.springframework.data.jpa.repository.JpaRepository;

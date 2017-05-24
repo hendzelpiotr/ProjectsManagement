@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Created by phendzel on 5/23/2017.
  */
 @SpringBootApplication(scanBasePackages = "com.project.java.prz.user")
-@EnableJpaRepositories(basePackages = "com.project.java.prz.user.repository")
+@EnableJpaRepositories(basePackages = "com.project.java.prz.user.core.repository")
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.project.java.prz.common.core.domain.security")
 public class UserServiceRunner {

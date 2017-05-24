@@ -3,20 +3,19 @@ package com.project.java.prz.common.core.exception;
 import lombok.Getter;
 
 /**
- * Created by Piotr on 13.05.2017.
+ * Created by phendzel on 5/24/2017.
  */
 @Getter
-public class GeneralException extends BaseException {
+public class UserException extends BaseException {
 
-    public GeneralException(FailReason failReason) {
+    public UserException(FailReason failReason) {
         this.failReason = failReason;
     }
 
     private FailReason failReason;
 
     public enum FailReason {
-        IO_EXCEPTION,
-        RESOURCE_NOT_FOUND
+        USER_NOT_FOUND
     }
 
 }

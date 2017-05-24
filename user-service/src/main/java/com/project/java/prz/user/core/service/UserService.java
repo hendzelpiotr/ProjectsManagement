@@ -1,4 +1,4 @@
-package com.project.java.prz.user.service;
+package com.project.java.prz.user.core.service;
 
 import com.project.java.prz.common.core.dto.UserDTO;
 
@@ -9,7 +9,6 @@ import java.util.List;
  */
 public interface UserService {
 
-    UserDTO getOne(Integer id);
     List<UserDTO> getAll();
     UserDTO getOneByLogin(String login);
 

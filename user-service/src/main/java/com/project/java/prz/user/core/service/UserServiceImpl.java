@@ -1,9 +1,10 @@
-package com.project.java.prz.user.service;
+package com.project.java.prz.user.core.service;
 
 import com.project.java.prz.common.core.domain.security.User;
 import com.project.java.prz.common.core.dto.UserDTO;
+import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
-import com.project.java.prz.user.repository.UserRepository;
+import com.project.java.prz.user.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserDTO getOne(Integer id) {
-        User user = userRepository.getOne(id);
-        return UserMapper.INSTANCE.convertToDTO(user);
-    }
-
-    @Override
     public List<UserDTO> getAll() {
         List<User> users = userRepository.findAll();
         return UserMapper.INSTANCE.convertToDTOs(users);
@@ -35,7 +30,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getOneByLogin(String login) {
         User user = userRepository.findByLogin(login);
-        return UserMapper.INSTANCE.convertToDTO(user);
+        if (user != null) {
+            return UserMapper.INSTANCE.convertToDTO(user);
+        } else throw new UserException(UserException.FailReason.USER_NOT_FOUND);
     }
 
 }

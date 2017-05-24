@@ -39,7 +39,7 @@ public class FileController {
     }
 
     @PreAuthorize("#oauth2.hasScope('read')")
-    @GetMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<byte[]> getDownloadData(Principal principal) throws IOException {
 
         byte[] data = fileService.readZipFile(principal.getName());

@@ -1,7 +1,7 @@
-package com.project.java.prz.user.controller;
+package com.project.java.prz.user.web.controller;
 
 import com.project.java.prz.common.core.dto.UserDTO;
-import com.project.java.prz.user.service.UserService;
+import com.project.java.prz.user.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +27,9 @@ public class UserController {
     }
 
     @GetMapping("{login}")
-    public ResponseEntity<UserDTO> getOne(@PathVariable("login") String login) {
-        return ResponseEntity.ok(userService.getOneByLogin(login));
+    public ResponseEntity<UserDTO> getOneByLogin(@PathVariable("login") String login) {
+        UserDTO userDTO = userService.getOneByLogin(login);
+        return ResponseEntity.ok(userDTO);
     }
 
 }

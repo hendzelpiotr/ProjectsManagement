@@ -9,10 +9,7 @@ import java.util.List;
  */
 public interface UserHttpClient {
 
-    UserDTO getOne(String login);
+    UserDTO getOneByLogin(String login);
     List<UserDTO> getAll();
-    UserDTO post(UserDTO UserDTO);
-    UserDTO put(UserDTO UserDTO, Integer id);
-    void delete(Integer id);
 
 }
