@@ -35,4 +35,12 @@ public class UserServiceImpl implements UserService {
         } else throw new UserException(UserException.FailReason.USER_NOT_FOUND);
     }
 
+    @Override
+    public UserDTO getOne(Integer id) {
+        User user = userRepository.findOne(id);
+        if (user != null) {
+            return UserMapper.INSTANCE.convertToDTO(user);
+        } else throw new UserException(UserException.FailReason.USER_NOT_FOUND);
+    }
+
 }

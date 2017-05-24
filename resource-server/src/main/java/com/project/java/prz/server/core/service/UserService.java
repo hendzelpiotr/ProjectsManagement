@@ -8,5 +8,6 @@ import com.project.java.prz.common.core.dto.UserDTO;
 public interface UserService {
 
     UserDTO getOneByLogin(String login);
+    UserDTO getOne(Integer id);
 
 }

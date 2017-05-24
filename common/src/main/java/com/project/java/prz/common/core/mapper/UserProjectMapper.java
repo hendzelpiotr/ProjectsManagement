@@ -13,18 +13,20 @@ import java.util.List;
 /**
  * Created by Piotr on 03.04.2017.
  */
-@Mapper(uses = {ProjectMapper.class, UserMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(uses = ProjectMapper.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserProjectMapper {
 
     UserProjectMapper INSTANCE = Mappers.getMapper(UserProjectMapper.class);
 
     @Mappings({
-            @Mapping(source = "project", target = "projectDTO")
+            @Mapping(source = "project", target = "projectDTO"),
+            @Mapping(source = "userId", target = "userDTO.id")
     })
     UserProjectDTO convertToDTO(UserProject userProject);
 
     @Mappings({
-            @Mapping(source = "projectDTO", target = "project")
+            @Mapping(source = "projectDTO", target = "project"),
+            @Mapping(source = "userDTO.id", target = "userId")
     })
     UserProject convertToEntity(UserProjectDTO userProjectDTO);
 

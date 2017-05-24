@@ -11,5 +11,5 @@ public interface UserService {
 
     List<UserDTO> getAll();
     UserDTO getOneByLogin(String login);
-
+    UserDTO getOne(Integer id);
 }

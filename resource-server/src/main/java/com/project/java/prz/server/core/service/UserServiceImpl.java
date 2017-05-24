@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService {
         return userHttpClient.getOneByLogin(login);
     }
 
+    @Override
+    public UserDTO getOne(Integer id) {
+        return userHttpClient.getOne(id);
+    }
+
 }

@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserHttpClient {
 
     UserDTO getOneByLogin(String login);
+    UserDTO getOne(Integer id);
     List<UserDTO> getAll();
-
 }

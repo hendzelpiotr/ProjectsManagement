@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Piotr on 17.04.2017.
@@ -35,15 +36,26 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     @Override
     public List<UserProjectDTO> getAll() {
-        return UserProjectMapper.INSTANCE.convertToDTOs(userProjectRepository.findAll());
+        List<UserProject> userProjects = userProjectRepository.findAll();
+        List<UserProjectDTO> userProjectDTOs = UserProjectMapper.INSTANCE.convertToDTOs(userProjects);
+
+        userProjectDTOs = userProjectDTOs.stream().map(userProjectDTO -> {
+            userProjectDTO.setUserDTO(userService.getOne(userProjectDTO.getUserDTO().getId()));
+            return userProjectDTO;
+        }).collect(Collectors.toList());
+
+        return userProjectDTOs;
     }
 
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
         UserDTO userDTO = getUser(login);
         UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
+
         if (userProject != null) {
-            return UserProjectMapper.INSTANCE.convertToDTO(userProject);
+            UserProjectDTO userProjectDTO = UserProjectMapper.INSTANCE.convertToDTO(userProject);
+            userProjectDTO.setUserDTO(userDTO);
+            return userProjectDTO;
         } else throw new UserProjectException(UserProjectException.FailReason.USER_PROJECT_NOT_FOUND);
     }
 

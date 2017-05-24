@@ -26,7 +26,12 @@ public class UserHttpClientImpl implements UserHttpClient {
 
     @Override
     public UserDTO getOneByLogin(String login) {
-        return httpClient().getForObject(getUrl() + login, UserDTO.class);
+        return httpClient().getForObject(getUrl() + "logins/" + login, UserDTO.class);
+    }
+
+    @Override
+    public UserDTO getOne(Integer id) {
+        return httpClient().getForObject(getUrl() + id, UserDTO.class);
     }
 
     @Override
