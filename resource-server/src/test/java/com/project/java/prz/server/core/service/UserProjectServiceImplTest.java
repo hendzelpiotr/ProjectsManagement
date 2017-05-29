@@ -6,6 +6,7 @@ import com.project.java.prz.common.core.domain.security.RoleType;
 import com.project.java.prz.common.core.dto.RoleDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
+import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.server.configuration.mockito.MockitoExtension;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
@@ -112,10 +113,7 @@ class UserProjectServiceImplTest {
 
     @Test
     void shouldDeleteByIdUsingStudentAccount() {
-        UserDTO userDTO = dummyUserDTO();
-        userDTO.setRoleDTO(dummyRoleDTO(RoleType.ROLE_STUDENT));
-
-        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(userDTO);
+        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
         when(userProjectRepository.findByUserId(USER_ID)).thenReturn(dummyUserProject());
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
@@ -130,7 +128,29 @@ class UserProjectServiceImplTest {
     }
 
     @Test
-    void update() {
+    void shouldUpdateUsingStudentAccount() {
+        final String additionalInformation = "Temp additional information";
+        UserProjectDTO dummyUserProjectDTOReadyToUpdate = dummyUserProjectDTO();
+        dummyUserProjectDTOReadyToUpdate.setAdditionalInformation(additionalInformation);
+        dummyUserProjectDTOReadyToUpdate.setMark("5.0");
+        UserProject dummyUserProjectAfterUpdate = dummyUserProject();
+        dummyUserProjectAfterUpdate.setAdditionalInformation(additionalInformation);
+
+        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
+        when(userProjectRepository.findByUserId(USER_ID)).thenReturn(dummyUserProject());
+        when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProjectAfterUpdate);
+
+        UserProjectDTO updatedUserProject = userProjectService.update(USER_LOGIN, dummyUserProjectDTOReadyToUpdate);
+
+        assertNotNull(updatedUserProject);
+        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userProjectRepository, times(1)).findByUserId(USER_ID);
+        verify(userProjectRepository, times(1)).save(any(UserProject.class));
+        verifyNoMoreInteractions(userService, userProjectRepository);
+    }
+
+    private UserProjectDTO dummyUserProjectDTO() {
+        return UserProjectMapper.INSTANCE.convertToDTO(dummyUserProject());
     }
 
     private UserProject dummyUserProject() {
@@ -168,6 +188,12 @@ class UserProjectServiceImplTest {
         roleDTO.setId(ROLE_ID);
         roleDTO.setName(roleType);
         return roleDTO;
+    }
+
+    private UserDTO getUserDTOWithSetRole(RoleType roleType) {
+        UserDTO userDTO = dummyUserDTO();
+        userDTO.setRoleDTO(dummyRoleDTO(roleType));
+        return userDTO;
     }
 
 }
