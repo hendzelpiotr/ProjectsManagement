@@ -2,6 +2,8 @@ package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.Project;
 import com.project.java.prz.common.core.domain.general.UserProject;
+import com.project.java.prz.common.core.domain.security.RoleType;
+import com.project.java.prz.common.core.dto.RoleDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.server.configuration.mockito.MockitoExtension;
@@ -12,29 +14,36 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by phendzel on 5/26/2017.
  */
-@ExtendWith(value = MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class UserProjectServiceImplTest {
 
     private static final Integer USER_PROJECT_ID = 1;
     private static final Integer PROJECT_ID = 11;
     private static final Integer USER_ID = 111;
+    private static final Integer ROLE_ID = 1111;
     private static final String USER_LOGIN = "user_login";
     private static final LocalDateTime DATETIME_OF_PROJECT_SELECTION = LocalDateTime.of(2016, 5, 12, 8, 0);
     private static final String PROJECT_NAME = "Web application";
     private static final Integer AVAILABLE_PROJECTS_COUNTER = 5;
     private static final String PROJECT_DESCRIPTION = "Dummy description";
+
+    @Mock
+    private Clock clock;
 
     @Mock
     private UserService userService;
@@ -57,6 +66,9 @@ class UserProjectServiceImplTest {
 
         assertNotNull(userProjectDTOs);
         assertEquals(userProjectDTOs.size(), dummyUserProjects().size());
+        verify(userProjectRepository, times(1)).findAll();
+        verify(userService, times(userProjectDTOs.size())).getOne(anyInt());
+        verifyNoMoreInteractions(userProjectRepository, userService);
     }
 
     @Test
@@ -68,19 +80,53 @@ class UserProjectServiceImplTest {
 
         assertNotNull(userProjectDTO);
         assertEquals(userProjectDTO.getId(), USER_PROJECT_ID);
+        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userProjectRepository, times(1)).findByUserId(USER_ID);
+        verifyNoMoreInteractions(userService, userProjectRepository);
     }
 
     @Test
-    void assignProjectToStudent() {
+    void shouldAssignProjectToStudent() {
+        Project project = dummyProject();
+        Project projectAfterSaved = dummyProject();
+        projectAfterSaved.setAvailableProjectsCounter(AVAILABLE_PROJECTS_COUNTER - 1);
+
         when(userService.getOneByLogin(USER_LOGIN)).thenReturn(dummyUserDTO());
-        when(projectRepository.getOne(PROJECT_ID)).thenReturn(dummyProject());
-        when(userProjectRepository.findByUserId(USER_ID));
+        when(projectRepository.getOne(PROJECT_ID)).thenReturn(project);
+        when(userProjectRepository.findByUserId(USER_ID)).thenReturn(null);
+        when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
+        when(clock.getZone()).thenReturn(ZoneOffset.UTC);
+        when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProject());
+        when(projectRepository.save(project)).thenReturn(projectAfterSaved);
 
+        UserProjectDTO userProjectDTO = userProjectService.assignProjectToStudent(USER_LOGIN, PROJECT_ID);
 
+        assertNotNull(userProjectDTO);
+        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(projectRepository, times(1)).getOne(PROJECT_ID);
+        verify(userProjectRepository, times(1)).findByUserId(USER_ID);
+        verify(userProjectRepository, times(1)).save(any(UserProject.class));
+        verify(projectRepository, times(1)).save(project);
+        verifyNoMoreInteractions(userService, projectRepository, userProjectRepository);
     }
 
     @Test
-    void deleteById() {
+    void shouldDeleteByIdUsingStudentAccount() {
+        UserDTO userDTO = dummyUserDTO();
+        userDTO.setRoleDTO(dummyRoleDTO(RoleType.ROLE_STUDENT));
+
+        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(userDTO);
+        when(userProjectRepository.findByUserId(USER_ID)).thenReturn(dummyUserProject());
+        when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
+        when(clock.getZone()).thenReturn(ZoneOffset.UTC);
+        doNothing().when(userProjectRepository).delete(USER_PROJECT_ID);
+
+        userProjectService.deleteById(USER_LOGIN, USER_PROJECT_ID);
+
+        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userProjectRepository, times(1)).findByUserId(USER_ID);
+        verify(userProjectRepository, times(1)).delete(USER_PROJECT_ID);
+        verifyNoMoreInteractions(userService, userProjectRepository);
     }
 
     @Test
@@ -115,6 +161,13 @@ class UserProjectServiceImplTest {
         userDTO.setEnabled(TRUE);
         userDTO.setLogin(USER_LOGIN);
         return userDTO;
+    }
+
+    private RoleDTO dummyRoleDTO(RoleType roleType) {
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setId(ROLE_ID);
+        roleDTO.setName(roleType);
+        return roleDTO;
     }
 
 }
