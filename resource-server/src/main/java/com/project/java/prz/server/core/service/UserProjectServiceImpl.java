@@ -159,7 +159,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
 
         return id.equals(userProject.getId())
-                && userProject.getScheduledCompletionDateTime() == null
+                && !isAfterScheduledCompletionDateTime(userProject.getScheduledCompletionDateTime())
                 && LocalDateTime.now(clock).isBefore(userProject.getDateTimeOfProjectSelection().plusDays(14));
     }
 
