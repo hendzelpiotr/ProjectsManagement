@@ -18,10 +18,10 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String mark;
-    @Column(name = "completion_date")
-    private LocalDateTime completionDateTime;
+    @Column(name = "scheduled_completion_date")
+    private LocalDateTime scheduledCompletionDateTime;
     @Column(name = "datetime_of_project_selection")
-    private LocalDateTime datetimeOfProjectSelection;
+    private LocalDateTime dateTimeOfProjectSelection;
     private String programmingLanguage;
     private String technologies;
     @Column(name = "`database`")
@@ -29,7 +29,6 @@ public class UserProject {
     private String additionalInformation;
     private String repositoryLink;
     private boolean sourceFilesUploaded;
-    private boolean readyToGrade;
     private Integer userId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")

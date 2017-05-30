@@ -139,6 +139,8 @@ class UserProjectServiceImplTest {
         when(userService.getOneByLogin(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
         when(userProjectRepository.findByUserId(USER_ID)).thenReturn(dummyUserProject());
         when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProjectAfterUpdate);
+        when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
+        when(clock.getZone()).thenReturn(ZoneOffset.UTC);
 
         UserProjectDTO updatedUserProject = userProjectService.update(USER_LOGIN, dummyUserProjectDTOReadyToUpdate);
 
@@ -158,7 +160,7 @@ class UserProjectServiceImplTest {
         dummyUserProject.setId(USER_PROJECT_ID);
         dummyUserProject.setProject(dummyProject());
         dummyUserProject.setUserId(USER_ID);
-        dummyUserProject.setDatetimeOfProjectSelection(DATETIME_OF_PROJECT_SELECTION);
+        dummyUserProject.setDateTimeOfProjectSelection(DATETIME_OF_PROJECT_SELECTION);
         return dummyUserProject;
     }
 

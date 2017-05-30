@@ -78,7 +78,7 @@ public class UserProjectServiceImpl implements UserProjectService {
             UserProject userProjectToSave = new UserProject();
             userProjectToSave.setProject(project);
             userProjectToSave.setUserId(userDTO.getId());
-            userProjectToSave.setDatetimeOfProjectSelection(LocalDateTime.now(clock));
+            userProjectToSave.setDateTimeOfProjectSelection(LocalDateTime.now(clock));
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
             if (availableProjectsCounter != null) {
@@ -129,27 +129,22 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     private UserProject prepareToUpdateByStudent(UserProjectDTO dto, UserProject dbUserProject) {
-        if (!dbUserProject.isReadyToGrade()) {
+        if (!isAfterScheduledCompletionDateTime(dbUserProject.getScheduledCompletionDateTime())) {
             dbUserProject.setProgrammingLanguage(dto.getProgrammingLanguage());
             dbUserProject.setTechnologies(dto.getTechnologies());
             dbUserProject.setDatabase(dto.getDatabase());
             dbUserProject.setRepositoryLink(dto.getRepositoryLink());
             dbUserProject.setAdditionalInformation(dto.getAdditionalInformation());
             dbUserProject.setSourceFilesUploaded(dto.isSourceFilesUploaded());
+            return dbUserProject;
         } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
-
-        if (dto.isReadyToGrade() && !dbUserProject.isReadyToGrade()) {
-            if (checkWhetherUserProjectIsReadyToGrade(dbUserProject)) {
-                dbUserProject.setReadyToGrade(dto.isReadyToGrade());
-                dbUserProject.setCompletionDateTime(LocalDateTime.now());
-            } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
-        }
-
-        return dbUserProject;
     }
 
-    private Boolean checkWhetherUserProjectIsReadyToGrade(UserProject userProject) {
-        return userProject.isSourceFilesUploaded() && userProject.getTechnologies() != null && userProject.getProgrammingLanguage() != null;
+    private boolean isAfterScheduledCompletionDateTime(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return false;
+        }
+        return LocalDateTime.now(clock).isAfter(dateTime);
     }
 
     private UserProject prepareToUpdateByAdmin(UserProjectDTO dto) {
@@ -164,8 +159,8 @@ public class UserProjectServiceImpl implements UserProjectService {
         UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
 
         return id.equals(userProject.getId())
-                && userProject.getCompletionDateTime() == null
-                && LocalDateTime.now(clock).isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+                && userProject.getScheduledCompletionDateTime() == null
+                && LocalDateTime.now(clock).isBefore(userProject.getDateTimeOfProjectSelection().plusDays(14));
     }
 
     private UserDTO getUser(String login) {
