@@ -7,7 +7,7 @@ import com.project.java.prz.common.core.dto.RoleDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.common.core.mapper.UserProjectMapper;
-import com.project.java.prz.server.configuration.mockito.MockitoExtension;
+import com.project.java.prz.common.configuration.mockito.MockitoExtension;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.junit.jupiter.api.Test;

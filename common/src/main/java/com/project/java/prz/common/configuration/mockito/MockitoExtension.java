@@ -1,4 +1,4 @@
-package com.project.java.prz.server.configuration.mockito;
+package com.project.java.prz.common.configuration.mockito;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
