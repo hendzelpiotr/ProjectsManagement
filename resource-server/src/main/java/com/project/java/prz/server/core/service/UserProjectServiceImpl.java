@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserProjectServiceImpl implements UserProjectService {
+
+    @Autowired
+    private Clock clock;
 
     @Autowired
     private UserService userService;
@@ -74,7 +78,7 @@ public class UserProjectServiceImpl implements UserProjectService {
             UserProject userProjectToSave = new UserProject();
             userProjectToSave.setProject(project);
             userProjectToSave.setUserId(userDTO.getId());
-            userProjectToSave.setDatetimeOfProjectSelection(LocalDateTime.now());
+            userProjectToSave.setDatetimeOfProjectSelection(LocalDateTime.now(clock));
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
             if (availableProjectsCounter != null) {
@@ -161,7 +165,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
         return id.equals(userProject.getId())
                 && userProject.getCompletionDateTime() == null
-                && userProject.getDatetimeOfProjectSelection().isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+                && LocalDateTime.now(clock).isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
     }
 
     private UserDTO getUser(String login) {
