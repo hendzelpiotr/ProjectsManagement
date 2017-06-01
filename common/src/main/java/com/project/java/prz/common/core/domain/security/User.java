@@ -23,15 +23,8 @@ public class User {
     private String login;
     @NotNull
     private String password;
-    private String name;
-    @NotNull
-    private String surname;
-    private Integer laboratoryGroup;
     @NotNull
     private Boolean enabled;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "professor_id")
-    private User professor;
     @NotNull
     @ManyToOne
     @JoinColumn(name = "role_id")

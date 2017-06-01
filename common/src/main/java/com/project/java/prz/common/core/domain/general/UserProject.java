@@ -29,7 +29,9 @@ public class UserProject {
     private String additionalInformation;
     private String repositoryLink;
     private boolean sourceFilesUploaded;
-    private Integer userId;
+    @OneToOne
+    @JoinColumn(name = "user_login")
+    private UserDetails user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;

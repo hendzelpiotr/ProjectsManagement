@@ -19,14 +19,12 @@ public interface UserProjectMapper {
     UserProjectMapper INSTANCE = Mappers.getMapper(UserProjectMapper.class);
 
     @Mappings({
-            @Mapping(source = "project", target = "projectDTO"),
-            @Mapping(source = "userId", target = "userDTO.id")
+            @Mapping(source = "project", target = "projectDTO")
     })
     UserProjectDTO convertToDTO(UserProject userProject);
 
     @Mappings({
-            @Mapping(source = "projectDTO", target = "project"),
-            @Mapping(source = "userDTO.id", target = "userId")
+            @Mapping(source = "projectDTO", target = "project")
     })
     UserProject convertToEntity(UserProjectDTO userProjectDTO);
 
