@@ -79,10 +79,10 @@ class UserServiceImplTest {
         User user = new User();
         user.setId(USER_ID);
         user.setEnabled(Boolean.TRUE);
-        //user.setLaboratoryGroup(LABORATORY_GROUP);
+        //userDetails.setLaboratoryGroup(LABORATORY_GROUP);
         user.setLogin(USER_LOGIN);
-        //user.setName(NAME);
-        //user.setSurname(SURNAME);
+        //userDetails.setName(NAME);
+        //userDetails.setSurname(SURNAME);
         user.setRole(dummyRole());
         return user;
     }

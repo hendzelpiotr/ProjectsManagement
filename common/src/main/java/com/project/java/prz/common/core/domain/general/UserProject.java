@@ -31,7 +31,7 @@ public class UserProject {
     private boolean sourceFilesUploaded;
     @OneToOne
     @JoinColumn(name = "user_login")
-    private UserDetails user;
+    private UserDetails userDetails;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;

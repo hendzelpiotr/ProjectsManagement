@@ -46,7 +46,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
         UserDetailsDTO userDetailsDTO = getUserDetails(login);
-        UserProject userProject = userProjectRepository.findByUserLogin(userDetailsDTO.getLogin());
+        UserProject userProject = userProjectRepository.findByUserDetailsLogin(userDetailsDTO.getLogin());
 
         if (userProject != null) {
             UserProjectDTO userProjectDTO = UserProjectMapper.INSTANCE.convertToDTO(userProject);
@@ -64,12 +64,12 @@ public class UserProjectServiceImpl implements UserProjectService {
 
         Integer availableProjectsCounter = project.getAvailableProjectsCounter();
 
-        UserProject userProject = userProjectRepository.findByUserLogin(userDetailsDTO.getLogin());
+        UserProject userProject = userProjectRepository.findByUserDetailsLogin(userDetailsDTO.getLogin());
         if (userProject == null
                 && (availableProjectsCounter == null || availableProjectsCounter > 0)) {
             UserProject userProjectToSave = new UserProject();
             userProjectToSave.setProject(project);
-            userProjectToSave.setUser(UserDetailsMapper.INSTANCE.convertToEntity(userDetailsDTO));
+            userProjectToSave.setUserDetails(UserDetailsMapper.INSTANCE.convertToEntity(userDetailsDTO));
             userProjectToSave.setDateTimeOfProjectSelection(LocalDateTime.now(clock));
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
@@ -107,7 +107,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         if (isAdmin(userDetailsDTO)) {
             userProject = prepareToUpdateByAdmin(userProjectDTO);
         } else {
-            userProject = userProjectRepository.findByUserLogin(userDetailsDTO.getLogin());
+            userProject = userProjectRepository.findByUserDetailsLogin(userDetailsDTO.getLogin());
             if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
                 userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
             } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
@@ -147,7 +147,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     private boolean isPossibleToRemove(Integer id, UserDetailsDTO userDetailsDTO) {
-        UserProject userProject = userProjectRepository.findByUserLogin(userDetailsDTO.getLogin());
+        UserProject userProject = userProjectRepository.findByUserDetailsLogin(userDetailsDTO.getLogin());
 
         return id.equals(userProject.getId())
                 && !isAfterScheduledCompletionDateTime(userProject.getScheduledCompletionDateTime())
