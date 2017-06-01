@@ -31,4 +31,5 @@ public class UserProjectExceptionHandler implements BaseExceptionHandler<UserPro
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

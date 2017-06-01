@@ -30,7 +30,7 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("api/projects").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user-projects").hasAuthority("ROLE_STUDENT")
-                .antMatchers(HttpMethod.GET, "/api/user-projects/my","/api/files").hasAuthority("ROLE_STUDENT")
+                .antMatchers(HttpMethod.GET, "/api/user-projects/my", "/api/files").hasAuthority("ROLE_STUDENT")
                 .antMatchers(HttpMethod.GET, "/api/user-projects").hasAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/users").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();

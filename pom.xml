@@ -10,8 +10,7 @@
     <modules>
         <module>resource-server</module>
         <module>common</module>
-        <module>authentication-server</module>
-        <module>user-service</module>
+        <module>authorization-server</module>
     </modules>
 
     <packaging>pom</packaging>
