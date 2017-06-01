@@ -1,7 +1,7 @@
 package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.dto.UserDTO;
+import com.project.java.prz.common.core.dto.UserDetailsDTO;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
 
     @Autowired
     private UserProjectRepository userProjectRepository;
@@ -33,32 +33,32 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
-        UserDTO userDTO = getUser(login);
+        UserDetailsDTO userDetailsDTO = getUserDetails(login);
         String directoryPath;
 
-        directoryPath = createUserDirectoryPathAsString(userDTO);
+        directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
         makeSureThatDirectoryExist(directoryPath);
 
-        Path path = Paths.get(createFilePathAsString(extension, userDTO, directoryPath));
+        Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
         Files.write(path, fileAsByteArray);
 
-        UserProject userProject = userProjectRepository.findByUserLogin(userDTO.getLogin());
+        UserProject userProject = userProjectRepository.findByUserLogin(userDetailsDTO.getLogin());
         updateSourceFileUploadedFlag(userProject);
     }
 
     @Override
     public byte[] readZipFile(String login) throws IOException {
-        UserDTO userDTO = getUser(login);
+        UserDetailsDTO userDetailsDTO = getUserDetails(login);
 
-        String directoryPath = createUserDirectoryPathAsString(userDTO);
+        String directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
         makeSureThatDirectoryExist(directoryPath);
 
-        Path path = Paths.get(createFilePathAsString("zip", userDTO, directoryPath));
+        Path path = Paths.get(createFilePathAsString("zip", userDetailsDTO, directoryPath));
         return Files.readAllBytes(path);
     }
 
-    private UserDTO getUser(String login) {
-        return userService.getOneByLogin(login);
+    private UserDetailsDTO getUserDetails(String login) {
+        return userService.getOne(login);
     }
 
     private void updateSourceFileUploadedFlag(UserProject userProject) {
@@ -70,12 +70,12 @@ public class FileServiceImpl implements FileService {
         FileUtils.forceMkdir(new File(path));
     }
 
-    private String createUserDirectoryPathAsString(UserDTO userDTO) {
-        return destinationPath + userDTO.getLaboratoryGroup() + '\\' + userDTO.getName() + '_' + userDTO.getSurname() + '\\';
+    private String createUserDirectoryPathAsString(UserDetailsDTO userDetailsDTO) {
+        return destinationPath + userDetailsDTO.getLaboratoryGroup() + '\\' + userDetailsDTO.getName() + '_' + userDetailsDTO.getSurname() + '\\';
     }
 
-    private String createFilePathAsString(String extension, UserDTO userDTO, String directoryPath) {
-        return directoryPath + userDTO.getLogin() + "." + extension;
+    private String createFilePathAsString(String extension, UserDetailsDTO userDetailsDTO, String directoryPath) {
+        return directoryPath + userDetailsDTO.getLogin() + "." + extension;
     }
 
 }

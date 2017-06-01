@@ -49,7 +49,7 @@ class UserProjectServiceImplTest {
     private Clock clock;
 
     @Mock
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
 
     @Mock
     private ProjectRepository projectRepository;
@@ -63,27 +63,27 @@ class UserProjectServiceImplTest {
     @Test
     void shouldReturnListOfUserProjects() {
         when(userProjectRepository.findAll()).thenReturn(dummyUserProjects());
-        when(userService.getOne(USER_ID)).thenReturn(dummyUserDTO());
+        //when(userService.getOne(USER_ID)).thenReturn(dummyUserDTO());
 
         List<UserProjectDTO> userProjectDTOs = userProjectService.getAll();
 
         assertNotNull(userProjectDTOs);
         assertEquals(userProjectDTOs.size(), dummyUserProjects().size());
         verify(userProjectRepository, times(1)).findAll();
-        verify(userService, times(userProjectDTOs.size())).getOne(anyInt());
+        //verify(userService, times(userProjectDTOs.size())).getOne(anyInt());
         verifyNoMoreInteractions(userProjectRepository, userService);
     }
 
     @Test
     void shouldReturnUserProjectOfCurrentlyLoggedInUser() {
-        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(dummyUserDTO());
+        //when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDTO());
         when(userProjectRepository.findByUserLogin(USER_LOGIN)).thenReturn(dummyUserProject());
 
         UserProjectDTO userProjectDTO = userProjectService.getUserProjectOfCurrentlyLoggedInUser(USER_LOGIN);
 
         assertNotNull(userProjectDTO);
         assertEquals(userProjectDTO.getId(), USER_PROJECT_ID);
-        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userService, times(1)).getOne(USER_LOGIN);
         verify(userProjectRepository, times(1)).findByUserLogin(USER_LOGIN);
         verifyNoMoreInteractions(userService, userProjectRepository);
     }
@@ -94,7 +94,7 @@ class UserProjectServiceImplTest {
         Project projectAfterSaved = dummyProject();
         projectAfterSaved.setAvailableProjectsCounter(AVAILABLE_PROJECTS_COUNTER - 1);
 
-        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(dummyUserDTO());
+        //when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDTO());
         when(projectRepository.getOne(PROJECT_ID)).thenReturn(project);
         when(userProjectRepository.findByUserLogin(USER_LOGIN)).thenReturn(null);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
@@ -105,7 +105,7 @@ class UserProjectServiceImplTest {
         UserProjectDTO userProjectDTO = userProjectService.assignProjectToStudent(USER_LOGIN, PROJECT_ID);
 
         assertNotNull(userProjectDTO);
-        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userService, times(1)).getOne(USER_LOGIN);
         verify(projectRepository, times(1)).getOne(PROJECT_ID);
         verify(userProjectRepository, times(1)).findByUserLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).save(any(UserProject.class));
@@ -115,7 +115,7 @@ class UserProjectServiceImplTest {
 
     @Test
     void shouldDeleteByIdUsingStudentAccount() {
-        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
+        //when(userService.getOne(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
         when(userProjectRepository.findByUserLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
@@ -123,7 +123,7 @@ class UserProjectServiceImplTest {
 
         userProjectService.deleteById(USER_LOGIN, USER_PROJECT_ID);
 
-        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userService, times(1)).getOne(USER_LOGIN);
         verify(userProjectRepository, times(1)).findByUserLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).delete(USER_PROJECT_ID);
         verifyNoMoreInteractions(userService, userProjectRepository);
@@ -138,7 +138,7 @@ class UserProjectServiceImplTest {
         UserProject dummyUserProjectAfterUpdate = dummyUserProject();
         dummyUserProjectAfterUpdate.setAdditionalInformation(additionalInformation);
 
-        when(userService.getOneByLogin(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
+        //when(userService.getOne(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
         when(userProjectRepository.findByUserLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProjectAfterUpdate);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
@@ -147,7 +147,7 @@ class UserProjectServiceImplTest {
         UserProjectDTO updatedUserProject = userProjectService.update(USER_LOGIN, dummyUserProjectDTOReadyToUpdate);
 
         assertNotNull(updatedUserProject);
-        verify(userService, times(1)).getOneByLogin(USER_LOGIN);
+        verify(userService, times(1)).getOne(USER_LOGIN);
         verify(userProjectRepository, times(1)).findByUserLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).save(any(UserProject.class));
         verifyNoMoreInteractions(userService, userProjectRepository);
