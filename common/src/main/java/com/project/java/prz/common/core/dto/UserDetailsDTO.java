@@ -13,7 +13,6 @@ import lombok.Setter;
 public class UserDetailsDTO {
 
     private String login;
-    private String password;
     private String name;
     private String surname;
     private Integer laboratoryGroup;

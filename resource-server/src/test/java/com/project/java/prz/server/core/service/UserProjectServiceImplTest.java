@@ -1,16 +1,16 @@
 package com.project.java.prz.server.core.service;
 
-import com.project.java.prz.common.core.domain.general.Project;
-import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.domain.security.RoleType;
-import com.project.java.prz.common.core.dto.RoleDTO;
-import com.project.java.prz.common.core.dto.UserDTO;
-import com.project.java.prz.common.core.dto.UserProjectDTO;
-import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.common.configuration.mockito.MockitoExtension;
+import com.project.java.prz.common.core.domain.general.Project;
+import com.project.java.prz.common.core.domain.general.UserDetails;
+import com.project.java.prz.common.core.domain.general.UserProject;
+import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserProjectDTO;
+import com.project.java.prz.common.core.exception.UserProjectException;
+import com.project.java.prz.common.core.mapper.UserDetailsMapper;
+import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,24 +22,23 @@ import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
-import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
  * Created by phendzel on 5/26/2017.
  */
-@Disabled
 @ExtendWith(MockitoExtension.class)
 class UserProjectServiceImplTest {
 
     private static final Integer USER_PROJECT_ID = 1;
     private static final Integer PROJECT_ID = 11;
-    private static final Integer USER_ID = 111;
-    private static final Integer ROLE_ID = 1111;
     private static final String USER_LOGIN = "user_login";
+    private static final String USER_NAME = "Piotr";
+    private static final Integer LABORATORY_GROUP = 2;
     private static final LocalDateTime DATETIME_OF_PROJECT_SELECTION = LocalDateTime.of(2016, 5, 12, 8, 0);
     private static final String PROJECT_NAME = "Web application";
     private static final Integer AVAILABLE_PROJECTS_COUNTER = 5;
@@ -63,20 +62,20 @@ class UserProjectServiceImplTest {
     @Test
     void shouldReturnListOfUserProjects() {
         when(userProjectRepository.findAll()).thenReturn(dummyUserProjects());
-        //when(userService.getOne(USER_ID)).thenReturn(dummyUserDTO());
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
 
         List<UserProjectDTO> userProjectDTOs = userProjectService.getAll();
 
         assertNotNull(userProjectDTOs);
         assertEquals(userProjectDTOs.size(), dummyUserProjects().size());
         verify(userProjectRepository, times(1)).findAll();
-        //verify(userService, times(userProjectDTOs.size())).getOne(anyInt());
-        verifyNoMoreInteractions(userProjectRepository, userService);
+        verifyNoMoreInteractions(userProjectRepository);
+        verifyZeroInteractions(userService);
     }
 
     @Test
     void shouldReturnUserProjectOfCurrentlyLoggedInUser() {
-        //when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDTO());
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
         when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
 
         UserProjectDTO userProjectDTO = userProjectService.getUserProjectOfCurrentlyLoggedInUser(USER_LOGIN);
@@ -89,12 +88,22 @@ class UserProjectServiceImplTest {
     }
 
     @Test
+    void shouldThrowUserProjectNotFoundException() {
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
+        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(null);
+
+        UserProjectException exception = assertThrows(UserProjectException.class, () -> userProjectService.getUserProjectOfCurrentlyLoggedInUser(USER_LOGIN));
+
+        assertEquals(exception.getFailReason(), UserProjectException.FailReason.USER_PROJECT_NOT_FOUND);
+    }
+
+    @Test
     void shouldAssignProjectToStudent() {
         Project project = dummyProject();
         Project projectAfterSaved = dummyProject();
         projectAfterSaved.setAvailableProjectsCounter(AVAILABLE_PROJECTS_COUNTER - 1);
 
-        //when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDTO());
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
         when(projectRepository.getOne(PROJECT_ID)).thenReturn(project);
         when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(null);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
@@ -115,7 +124,7 @@ class UserProjectServiceImplTest {
 
     @Test
     void shouldDeleteByIdUsingStudentAccount() {
-        //when(userService.getOne(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
         when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
@@ -124,7 +133,6 @@ class UserProjectServiceImplTest {
         userProjectService.deleteById(USER_LOGIN, USER_PROJECT_ID);
 
         verify(userService, times(1)).getOne(USER_LOGIN);
-        verify(userProjectRepository, times(1)).findByUserDetailsLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).delete(USER_PROJECT_ID);
         verifyNoMoreInteractions(userService, userProjectRepository);
     }
@@ -138,7 +146,7 @@ class UserProjectServiceImplTest {
         UserProject dummyUserProjectAfterUpdate = dummyUserProject();
         dummyUserProjectAfterUpdate.setAdditionalInformation(additionalInformation);
 
-        //when(userService.getOne(USER_LOGIN)).thenReturn(getUserDTOWithSetRole(RoleType.ROLE_STUDENT));
+        when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
         when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProjectAfterUpdate);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
@@ -148,7 +156,6 @@ class UserProjectServiceImplTest {
 
         assertNotNull(updatedUserProject);
         verify(userService, times(1)).getOne(USER_LOGIN);
-        verify(userProjectRepository, times(1)).findByUserDetailsLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).save(any(UserProject.class));
         verifyNoMoreInteractions(userService, userProjectRepository);
     }
@@ -161,7 +168,7 @@ class UserProjectServiceImplTest {
         UserProject dummyUserProject = new UserProject();
         dummyUserProject.setId(USER_PROJECT_ID);
         dummyUserProject.setProject(dummyProject());
-        //dummyUserProject.setUserId(USER_ID);
+        dummyUserProject.setUserDetails(dummyUserDetails());
         dummyUserProject.setDateTimeOfProjectSelection(DATETIME_OF_PROJECT_SELECTION);
         return dummyUserProject;
     }
@@ -179,25 +186,16 @@ class UserProjectServiceImplTest {
         return Collections.singletonList(dummyUserProject());
     }
 
-    private UserDTO dummyUserDTO() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(USER_ID);
-        userDTO.setEnabled(TRUE);
-        userDTO.setLogin(USER_LOGIN);
-        return userDTO;
+    private UserDetailsDTO dummyUserDetailsDTO() {
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setLogin(USER_LOGIN);
+        userDetailsDTO.setLaboratoryGroup(LABORATORY_GROUP);
+        userDetailsDTO.setName(USER_NAME);
+        return userDetailsDTO;
     }
 
-    private RoleDTO dummyRoleDTO(RoleType roleType) {
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setId(ROLE_ID);
-        roleDTO.setName(roleType);
-        return roleDTO;
-    }
-
-    private UserDTO getUserDTOWithSetRole(RoleType roleType) {
-        UserDTO userDTO = dummyUserDTO();
-        userDTO.setRoleDTO(dummyRoleDTO(roleType));
-        return userDTO;
+    private UserDetails dummyUserDetails() {
+        return UserDetailsMapper.INSTANCE.convertToEntity(dummyUserDetailsDTO());
     }
 
 }
