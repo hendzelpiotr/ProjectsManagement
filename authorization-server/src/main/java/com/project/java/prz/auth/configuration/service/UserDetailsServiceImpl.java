@@ -1,8 +1,9 @@
 package com.project.java.prz.auth.configuration.service;
 
-import com.project.java.prz.common.core.domain.security.User;
 import com.project.java.prz.auth.core.repository.UserRepository;
+import com.project.java.prz.common.core.domain.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,8 @@ import java.util.Collections;
 /**
  * Created by Piotr on 21.05.2017.
  */
-@Service("userDetailsService")
+@Service
+@Configuration
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired

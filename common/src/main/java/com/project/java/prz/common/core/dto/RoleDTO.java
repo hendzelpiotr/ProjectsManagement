@@ -1,7 +1,9 @@
 package com.project.java.prz.common.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.project.java.prz.common.core.domain.security.RoleType;
+import com.project.java.prz.common.core.util.View;
 import lombok.*;
 
 /**
@@ -15,6 +17,7 @@ import lombok.*;
 public class RoleDTO {
 
     private Integer id;
+    @JsonView(View.SecuredUser.class)
     private RoleType name;
 
 }

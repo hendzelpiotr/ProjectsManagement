@@ -15,7 +15,8 @@ public class UserException extends BaseException {
     private FailReason failReason;
 
     public enum FailReason {
-        USER_NOT_FOUND
+        USER_NOT_FOUND,
+        USER_ALREADY_ENABLED, INVALID_IDS, USER_ALREADY_EXITS
     }
 
 }
