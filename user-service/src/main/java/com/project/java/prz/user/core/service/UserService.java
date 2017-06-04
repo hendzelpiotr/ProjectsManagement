@@ -1,4 +1,4 @@
-package com.project.java.prz.auth.core.service;
+package com.project.java.prz.user.core.service;
 
 import com.project.java.prz.common.core.dto.UserDTO;
 

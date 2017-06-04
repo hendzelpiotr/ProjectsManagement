@@ -1,12 +1,11 @@
-package com.project.java.prz.auth.web.controller;
+package com.project.java.prz.user.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.project.java.prz.auth.core.service.UserService;
+import com.project.java.prz.user.core.service.UserService;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.util.View;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

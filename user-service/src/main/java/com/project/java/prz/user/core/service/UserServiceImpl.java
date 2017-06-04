@@ -1,12 +1,12 @@
-package com.project.java.prz.auth.core.service;
+package com.project.java.prz.user.core.service;
 
-import com.project.java.prz.auth.core.repository.RoleRepository;
-import com.project.java.prz.auth.core.repository.UserRepository;
 import com.project.java.prz.common.core.domain.security.RoleType;
 import com.project.java.prz.common.core.domain.security.User;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
+import com.project.java.prz.user.core.repository.RoleRepository;
+import com.project.java.prz.user.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

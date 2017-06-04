@@ -1,4 +1,4 @@
-package com.project.java.prz.auth.web.handler;
+package com.project.java.prz.user.web.handler;
 
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.exception.pattern.ApiResponseError;

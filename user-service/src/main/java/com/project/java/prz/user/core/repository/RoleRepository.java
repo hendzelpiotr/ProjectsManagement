@@ -1,4 +1,4 @@
-package com.project.java.prz.auth.core.repository;
+package com.project.java.prz.user.core.repository;
 
 import com.project.java.prz.common.core.domain.security.Role;
 import com.project.java.prz.common.core.domain.security.RoleType;

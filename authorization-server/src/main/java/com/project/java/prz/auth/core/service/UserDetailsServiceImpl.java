@@ -1,4 +1,4 @@
-package com.project.java.prz.auth.configuration.service;
+package com.project.java.prz.auth.core.service;
 
 import com.project.java.prz.auth.core.repository.UserRepository;
 import com.project.java.prz.common.core.domain.security.User;

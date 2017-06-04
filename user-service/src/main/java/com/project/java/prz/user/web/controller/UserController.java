@@ -1,7 +1,7 @@
-package com.project.java.prz.auth.web.controller;
+package com.project.java.prz.user.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.project.java.prz.auth.core.service.UserService;
+import com.project.java.prz.user.core.service.UserService;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.util.View;
