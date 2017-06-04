@@ -1,5 +1,6 @@
 package com.project.java.prz.user.core.service;
 
+import com.project.java.prz.common.core.dto.RegistrationDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
 
 /**
@@ -7,7 +8,7 @@ import com.project.java.prz.common.core.dto.UserDTO;
  */
 public interface UserService {
 
-    UserDTO registerNewUser(UserDTO userDTO);
+    UserDTO registerNewUser(RegistrationDTO registrationDTO);
     UserDTO enableUserAccount(Integer id, UserDTO userDTO);
 
 }

@@ -1,6 +1,7 @@
 package com.project.java.prz.user.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.project.java.prz.common.core.dto.RegistrationDTO;
 import com.project.java.prz.user.core.service.UserService;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.util.View;
@@ -25,8 +26,8 @@ public class RegistrationController {
 
     @PostMapping
     @JsonView(View.SecuredUser.class)
-    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
-        UserDTO registeredUser = userService.registerNewUser(userDTO);
+    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
+        UserDTO registeredUser = userService.registerNewUser(registrationDTO);
         return ResponseEntity.status(201).body(registeredUser);
     }
 

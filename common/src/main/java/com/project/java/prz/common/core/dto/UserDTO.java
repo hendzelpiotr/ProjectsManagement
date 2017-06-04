@@ -6,8 +6,6 @@ import com.project.java.prz.common.core.util.View;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Created by Piotr on 03.04.2017.
  */
@@ -18,10 +16,8 @@ public class UserDTO {
 
     @JsonView(View.SecuredUser.class)
     private Integer id;
-    @NotNull
     @JsonView(View.SecuredUser.class)
     private String login;
-    @NotNull
     private String password;
     @JsonView(View.SecuredUser.class)
     private Boolean enabled;

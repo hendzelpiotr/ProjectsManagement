@@ -21,7 +21,6 @@ public class UserDetails {
     @NotNull
     private String login;
     private String name;
-    @NotNull
     private String surname;
     private Integer laboratoryGroup;
     @ManyToOne(fetch = FetchType.LAZY)

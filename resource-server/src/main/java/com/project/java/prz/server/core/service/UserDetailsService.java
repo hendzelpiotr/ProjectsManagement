@@ -9,4 +9,6 @@ public interface UserDetailsService {
 
     UserDetailsDTO getOne(String login);
 
+    UserDetailsDTO createNew(UserDetailsDTO userDetailsDTO);
+
 }

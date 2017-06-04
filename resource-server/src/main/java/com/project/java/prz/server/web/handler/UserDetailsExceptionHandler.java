@@ -1,6 +1,6 @@
-package com.project.java.prz.user.web.handler;
+package com.project.java.prz.server.web.handler;
 
-import com.project.java.prz.common.core.exception.UserException;
+import com.project.java.prz.common.core.exception.UserDetailsException;
 import com.project.java.prz.common.core.exception.pattern.ApiResponseError;
 import com.project.java.prz.common.web.handler.BaseExceptionHandler;
 import org.springframework.http.HttpStatus;
@@ -10,22 +10,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by Piotr on 03.06.2017.
+ * Created by Piotr on 04.06.2017.
  */
 @ControllerAdvice
-public class UserExceptionHandler implements BaseExceptionHandler<UserException> {
+public class UserDetailsExceptionHandler implements BaseExceptionHandler<UserDetailsException> {
 
     @Override
     @ResponseBody
-    @ExceptionHandler(value = UserException.class)
-    public ResponseEntity<ApiResponseError> handleException(UserException e) {
+    @ExceptionHandler(value = UserDetailsException.class)
+    public ResponseEntity<ApiResponseError> handleException(UserDetailsException e) {
         switch (e.getFailReason()) {
-            case USER_NOT_FOUND:
-                return returnApiResponseError(e, HttpStatus.NOT_FOUND);
-            case USER_ALREADY_EXITS:
-            case USER_ALREADY_ENABLED:
-            case CAN_NOT_CREATE_USER:
-            case INVALID_IDS:
+            case USER_DETAILS_ALREADY_EXISTS:
                 return returnApiResponseError(e, HttpStatus.BAD_REQUEST);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
