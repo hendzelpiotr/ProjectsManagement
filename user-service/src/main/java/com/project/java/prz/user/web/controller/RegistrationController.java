@@ -30,14 +30,4 @@ public class RegistrationController {
         return ResponseEntity.status(201).body(registeredUser);
     }
 
-    @PutMapping("{id}")
-    @JsonView(View.SecuredUser.class)
-    public ResponseEntity<UserDTO> enableUser(Principal principal, @PathVariable("id") Integer id, @RequestBody @Valid UserDTO userDTO) {
-        if(id.equals(userDTO.getId())) {
-            principal.getName();
-            UserDTO enabledUser = userService.enableUserAccount(id, userDTO);
-            return ResponseEntity.ok(enabledUser);
-        } else throw new UserException(UserException.FailReason.INVALID_IDS);
-    }
-
 }
