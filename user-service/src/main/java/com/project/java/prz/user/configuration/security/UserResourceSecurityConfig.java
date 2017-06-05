@@ -35,7 +35,7 @@ public class UserResourceSecurityConfig extends ResourceServerConfigurerAdapter 
         http
                 .authorizeRequests()
                 .antMatchers("/registrations").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.PUT, "/registrations/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
     }
 
