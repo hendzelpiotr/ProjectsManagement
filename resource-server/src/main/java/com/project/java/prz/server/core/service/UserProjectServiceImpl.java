@@ -71,6 +71,7 @@ public class UserProjectServiceImpl implements UserProjectService {
             userProjectToSave.setProject(project);
             userProjectToSave.setUserDetails(UserDetailsMapper.INSTANCE.convertToEntity(userDetailsDTO));
             userProjectToSave.setDateTimeOfProjectSelection(LocalDateTime.now(clock));
+            userProjectToSave.setScheduledCompletionDateTime(calculateScheduledCompletionDate());
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
             if (availableProjectsCounter != null) {
@@ -82,6 +83,17 @@ public class UserProjectServiceImpl implements UserProjectService {
         } else {
             throw new UserProjectException(UserProjectException.FailReason.YOU_ALREADY_CHOSE_PROJECT);
         }
+
+    }
+
+    private LocalDateTime calculateScheduledCompletionDate() {
+        LocalDateTime now = LocalDateTime.now(clock);
+        int year = now.getYear();
+        int month = now.getMonth().getValue();
+
+        if(month>=2 && month <=6) {
+            return LocalDateTime.of(year, 7, 10, 12, 0, 0);
+        } else return LocalDateTime.of(year + 1, 2, 10, 12, 0, 0);
 
     }
 
