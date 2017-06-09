@@ -1,7 +1,7 @@
 package com.project.java.prz.common.core.mapper;
 
-import com.project.java.prz.common.core.domain.general.UserDetails;
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.domain.general.UserDetail;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -14,22 +14,22 @@ import java.util.List;
  * Created by phendzel on 6/1/2017.
  */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserDetailsMapper {
+public interface UserDetailMapper {
 
-    UserDetailsMapper INSTANCE = Mappers.getMapper(UserDetailsMapper.class);
+    UserDetailMapper INSTANCE = Mappers.getMapper(UserDetailMapper.class);
 
     @Mappings({
             @Mapping(source = "professor", target = "professorDTO")
     })
-    UserDetailsDTO convertToDTO(UserDetails user);
+    UserDetailDTO convertToDTO(UserDetail user);
 
     @Mappings({
             @Mapping(source = "professorDTO", target = "professor")
     })
-    UserDetails convertToEntity(UserDetailsDTO userDTO);
+    UserDetail convertToEntity(UserDetailDTO userDTO);
 
-    List<UserDetailsDTO> convertToDTOs(List<UserDetails> users);
+    List<UserDetailDTO> convertToDTOs(List<UserDetail> users);
 
-    List<UserDetails> convertToEntities(List<UserDetailsDTO> userDTOs);
+    List<UserDetail> convertToEntities(List<UserDetailDTO> userDTOs);
 
 }

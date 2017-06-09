@@ -1,7 +1,7 @@
 package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
-        UserDetailsDTO userDetailsDTO = getUserDetails(login);
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
         String directoryPath;
 
         directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
@@ -42,13 +42,13 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
         Files.write(path, fileAsByteArray);
 
-        UserProject userProject = userProjectRepository.findByUserDetailsLogin(userDetailsDTO.getLogin());
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
         updateSourceFileUploadedFlag(userProject);
     }
 
     @Override
     public byte[] readZipFile(String login) throws IOException {
-        UserDetailsDTO userDetailsDTO = getUserDetails(login);
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
 
         String directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
         makeSureThatDirectoryExist(directoryPath);
@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
         return Files.readAllBytes(path);
     }
 
-    private UserDetailsDTO getUserDetails(String login) {
+    private UserDetailDTO getUserDetails(String login) {
         return userService.getOne(login);
     }
 
@@ -70,11 +70,11 @@ public class FileServiceImpl implements FileService {
         FileUtils.forceMkdir(new File(path));
     }
 
-    private String createUserDirectoryPathAsString(UserDetailsDTO userDetailsDTO) {
+    private String createUserDirectoryPathAsString(UserDetailDTO userDetailsDTO) {
         return destinationPath + userDetailsDTO.getLaboratoryGroup() + '\\' + userDetailsDTO.getName() + '_' + userDetailsDTO.getSurname() + '\\';
     }
 
-    private String createFilePathAsString(String extension, UserDetailsDTO userDetailsDTO, String directoryPath) {
+    private String createFilePathAsString(String extension, UserDetailDTO userDetailsDTO, String directoryPath) {
         return directoryPath + userDetailsDTO.getLogin() + "." + extension;
     }
 

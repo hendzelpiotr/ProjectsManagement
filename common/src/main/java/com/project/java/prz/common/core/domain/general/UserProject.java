@@ -18,8 +18,6 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String mark;
-    @Column(name = "scheduled_completion_date")
-    private LocalDateTime scheduledCompletionDateTime;
     @Column(name = "datetime_of_project_selection")
     private LocalDateTime dateTimeOfProjectSelection;
     private String programmingLanguage;
@@ -31,7 +29,7 @@ public class UserProject {
     private boolean sourceFilesUploaded;
     @OneToOne
     @JoinColumn(name = "user_login")
-    private UserDetails userDetails;
+    private UserDetail userDetail;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;

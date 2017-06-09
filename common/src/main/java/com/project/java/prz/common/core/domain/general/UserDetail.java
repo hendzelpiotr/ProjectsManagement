@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by phendzel on 6/1/2017.
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDetails {
+public class UserDetail {
 
     @Id
     @NotNull
@@ -25,9 +26,12 @@ public class UserDetails {
     private Integer laboratoryGroup;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professor_login")
-    private UserDetails professor;
-    @OneToOne(mappedBy = "userDetails")
+    private UserDetail professor;
+    @OneToOne(mappedBy = "userDetail")
     @JsonIgnore
     private UserProject userProject;
+    @OneToMany(mappedBy = "userDetail")
+    private List<UserSetting> userSettings;
+
 
 }

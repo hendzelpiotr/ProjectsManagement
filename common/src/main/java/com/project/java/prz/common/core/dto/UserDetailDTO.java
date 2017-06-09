@@ -10,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDetailsDTO {
+public class UserDetailDTO {
 
     private String login;
     private String name;
     private String surname;
     private Integer laboratoryGroup;
-    private UserDetailsDTO professorDTO;
+    private UserDetailDTO professorDTO;
 
 }

@@ -4,7 +4,7 @@ import com.project.java.prz.common.core.domain.security.RoleType;
 import com.project.java.prz.common.core.domain.security.User;
 import com.project.java.prz.common.core.dto.RegistrationDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
 import com.project.java.prz.user.core.dao.UserDao;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
             user.setEnabled(Boolean.TRUE);
             user = userRepository.save(user);
 
-            UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+            UserDetailDTO userDetailsDTO = new UserDetailDTO();
             userDetailsDTO.setLogin(user.getLogin());
             ResponseEntity responseEntity = httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
 

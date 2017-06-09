@@ -1,6 +1,6 @@
 package com.project.java.prz.server.web.controller;
 
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.server.core.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ public class UserDetailsController {
     private UserDetailsService userDetailsService;
 
     @PostMapping
-    public ResponseEntity<UserDetailsDTO> create(@RequestBody UserDetailsDTO userDetailsDTO) {
-        UserDetailsDTO createdUserDetails = userDetailsService.createNew(userDetailsDTO);
+    public ResponseEntity<UserDetailDTO> create(@RequestBody UserDetailDTO userDetailsDTO) {
+        UserDetailDTO createdUserDetails = userDetailsService.createNew(userDetailsDTO);
         return ResponseEntity.status(201).body(createdUserDetails);
     }
 

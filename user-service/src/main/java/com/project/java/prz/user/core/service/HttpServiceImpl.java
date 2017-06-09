@@ -1,6 +1,6 @@
 package com.project.java.prz.user.core.service;
 
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class HttpServiceImpl implements HttpService {
 
     @Override
     public ResponseEntity sendPost(String url, Object body) {
-        return httpClient().postForEntity(url, body, UserDetailsDTO.class);
+        return httpClient().postForEntity(url, body, UserDetailDTO.class);
     }
 
     private RestTemplate httpClient() {
@@ -29,6 +29,5 @@ public class HttpServiceImpl implements HttpService {
         });
         return restClient;
     }
-
 
 }

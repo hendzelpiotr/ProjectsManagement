@@ -2,12 +2,12 @@ package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.configuration.mockito.MockitoExtension;
 import com.project.java.prz.common.core.domain.general.Project;
-import com.project.java.prz.common.core.domain.general.UserDetails;
+import com.project.java.prz.common.core.domain.general.UserDetail;
 import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.dto.UserDetailsDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.common.core.exception.UserProjectException;
-import com.project.java.prz.common.core.mapper.UserDetailsMapper;
+import com.project.java.prz.common.core.mapper.UserDetailMapper;
 import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
@@ -76,21 +76,21 @@ class UserProjectServiceImplTest {
     @Test
     void shouldReturnUserProjectOfCurrentlyLoggedInUser() {
         when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
-        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
+        when(userProjectRepository.findByUserDetailLogin(USER_LOGIN)).thenReturn(dummyUserProject());
 
         UserProjectDTO userProjectDTO = userProjectService.getUserProjectOfCurrentlyLoggedInUser(USER_LOGIN);
 
         assertNotNull(userProjectDTO);
         assertEquals(userProjectDTO.getId(), USER_PROJECT_ID);
         verify(userService, times(1)).getOne(USER_LOGIN);
-        verify(userProjectRepository, times(1)).findByUserDetailsLogin(USER_LOGIN);
+        verify(userProjectRepository, times(1)).findByUserDetailLogin(USER_LOGIN);
         verifyNoMoreInteractions(userService, userProjectRepository);
     }
 
     @Test
     void shouldThrowUserProjectNotFoundException() {
         when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
-        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(null);
+        when(userProjectRepository.findByUserDetailLogin(USER_LOGIN)).thenReturn(null);
 
         UserProjectException exception = assertThrows(UserProjectException.class, () -> userProjectService.getUserProjectOfCurrentlyLoggedInUser(USER_LOGIN));
 
@@ -105,7 +105,7 @@ class UserProjectServiceImplTest {
 
         when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
         when(projectRepository.getOne(PROJECT_ID)).thenReturn(project);
-        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(null);
+        when(userProjectRepository.findByUserDetailLogin(USER_LOGIN)).thenReturn(null);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
         when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProject());
@@ -116,7 +116,7 @@ class UserProjectServiceImplTest {
         assertNotNull(userProjectDTO);
         verify(userService, times(1)).getOne(USER_LOGIN);
         verify(projectRepository, times(1)).getOne(PROJECT_ID);
-        verify(userProjectRepository, times(1)).findByUserDetailsLogin(USER_LOGIN);
+        verify(userProjectRepository, times(1)).findByUserDetailLogin(USER_LOGIN);
         verify(userProjectRepository, times(1)).save(any(UserProject.class));
         verify(projectRepository, times(1)).save(project);
         verifyNoMoreInteractions(userService, projectRepository, userProjectRepository);
@@ -125,7 +125,7 @@ class UserProjectServiceImplTest {
     @Test
     void shouldDeleteByIdUsingStudentAccount() {
         when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
-        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
+        when(userProjectRepository.findByUserDetailLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
         doNothing().when(userProjectRepository).delete(USER_PROJECT_ID);
@@ -147,7 +147,7 @@ class UserProjectServiceImplTest {
         dummyUserProjectAfterUpdate.setAdditionalInformation(additionalInformation);
 
         when(userService.getOne(USER_LOGIN)).thenReturn(dummyUserDetailsDTO());
-        when(userProjectRepository.findByUserDetailsLogin(USER_LOGIN)).thenReturn(dummyUserProject());
+        when(userProjectRepository.findByUserDetailLogin(USER_LOGIN)).thenReturn(dummyUserProject());
         when(userProjectRepository.save(any(UserProject.class))).thenReturn(dummyUserProjectAfterUpdate);
         when(clock.instant()).thenReturn(DATETIME_OF_PROJECT_SELECTION.toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
@@ -168,7 +168,7 @@ class UserProjectServiceImplTest {
         UserProject dummyUserProject = new UserProject();
         dummyUserProject.setId(USER_PROJECT_ID);
         dummyUserProject.setProject(dummyProject());
-        dummyUserProject.setUserDetails(dummyUserDetails());
+        dummyUserProject.setUserDetail(dummyUserDetails());
         dummyUserProject.setDateTimeOfProjectSelection(DATETIME_OF_PROJECT_SELECTION);
         return dummyUserProject;
     }
@@ -186,16 +186,16 @@ class UserProjectServiceImplTest {
         return Collections.singletonList(dummyUserProject());
     }
 
-    private UserDetailsDTO dummyUserDetailsDTO() {
-        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+    private UserDetailDTO dummyUserDetailsDTO() {
+        UserDetailDTO userDetailsDTO = new UserDetailDTO();
         userDetailsDTO.setLogin(USER_LOGIN);
         userDetailsDTO.setLaboratoryGroup(LABORATORY_GROUP);
         userDetailsDTO.setName(USER_NAME);
         return userDetailsDTO;
     }
 
-    private UserDetails dummyUserDetails() {
-        return UserDetailsMapper.INSTANCE.convertToEntity(dummyUserDetailsDTO());
+    private UserDetail dummyUserDetails() {
+        return UserDetailMapper.INSTANCE.convertToEntity(dummyUserDetailsDTO());
     }
 
 }
