@@ -128,7 +128,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     private UserProject prepareToUpdateByStudent(UserProjectDTO dto, UserProject dbUserProject) {
-        if (!isAfterScheduledCompletionDateTime(getScheduledCompletionDate(dbUserProject))) {
+        if (!userSettingService.isAfterScheduledCompletionDateTime(getScheduledCompletionDate(dbUserProject))) {
             dbUserProject.setProgrammingLanguage(dto.getProgrammingLanguage());
             dbUserProject.setTechnologies(dto.getTechnologies());
             dbUserProject.setDatabase(dto.getDatabase());
@@ -146,13 +146,6 @@ public class UserProjectServiceImpl implements UserProjectService {
         return LocalDate.parse(userSetting.getValue());
     }
 
-    private boolean isAfterScheduledCompletionDateTime(LocalDate date) {
-        if (date == null) {
-            return false;
-        }
-        return LocalDate.now(clock).isAfter(date);
-    }
-
     private UserProject prepareToUpdateByAdmin(UserProjectDTO dto) {
         return UserProjectMapper.INSTANCE.convertToEntity(dto);
     }
@@ -168,7 +161,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
 
         return id.equals(userProject.getId())
-                && !isAfterScheduledCompletionDateTime(getScheduledCompletionDate(userProject))
+                && !userSettingService.isAfterScheduledCompletionDateTime(getScheduledCompletionDate(userProject))
                 && LocalDateTime.now(clock).isBefore(userProject.getDateTimeOfProjectSelection().plusDays(14));
     }
 

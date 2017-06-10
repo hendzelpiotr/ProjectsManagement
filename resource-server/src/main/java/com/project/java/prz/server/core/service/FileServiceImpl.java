@@ -1,7 +1,10 @@
 package com.project.java.prz.server.core.service;
 
+import com.project.java.prz.common.core.domain.general.SettingName;
 import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
+import com.project.java.prz.common.core.dto.UserSettingDTO;
+import com.project.java.prz.common.core.exception.FileException;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+
+import static com.project.java.prz.common.core.exception.FileException.FailReason.YOU_CAN_NOT_SAVE_FILE;
 
 /**
  * Created by Piotr on 13.05.2017.
@@ -28,6 +34,9 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private UserProjectRepository userProjectRepository;
 
+    @Autowired
+    private UserSettingService userSettingService;
+
     @Value("${upload.destination.path}")
     private String destinationPath;
 
@@ -36,14 +45,19 @@ public class FileServiceImpl implements FileService {
         UserDetailDTO userDetailsDTO = getUserDetails(login);
         String directoryPath;
 
-        directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
-        makeSureThatDirectoryExist(directoryPath);
+        UserSettingDTO scheduledCompletionDateSetting = userSettingService.getUserSettingByNameAndLogin(userDetailsDTO.getLogin(), SettingName.SCHEDULED_COMPLETION_DATE);
+        LocalDate scheduledCompletionDate = LocalDate.parse(scheduledCompletionDateSetting.getValue());
 
-        Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
-        Files.write(path, fileAsByteArray);
+        if (!userSettingService.isAfterScheduledCompletionDateTime(scheduledCompletionDate)) {
+            directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
+            makeSureThatDirectoryExist(directoryPath);
 
-        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
-        updateSourceFileUploadedFlag(userProject);
+            Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
+            Files.write(path, fileAsByteArray);
+
+            UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
+            updateSourceFileUploadedFlag(userProject);
+        } else throw new FileException(YOU_CAN_NOT_SAVE_FILE);
     }
 
     @Override
