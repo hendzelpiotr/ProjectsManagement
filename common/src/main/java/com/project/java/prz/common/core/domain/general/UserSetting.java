@@ -23,8 +23,6 @@ public class UserSetting {
     @NotNull
     @Column(columnDefinition = "TEXT")
     private String value;
-    @NotNull
-    private boolean global;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "setting_id")
     private Setting setting;

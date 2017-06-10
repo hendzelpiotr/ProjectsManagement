@@ -5,6 +5,7 @@ import com.project.java.prz.common.core.exception.UserProjectException;
 import com.project.java.prz.server.core.service.UserProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -39,17 +40,20 @@ public class UserProjectController {
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity delete(@PathVariable("id") Integer id, Principal principal) {
-        userProjectService.deleteById(principal.getName(), id);
+    public ResponseEntity delete(@PathVariable("id") Integer id, Principal principal, Authentication authentication) {
+        userProjectService.deleteById(principal.getName(), authentication.getAuthorities(), id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserProjectDTO> update(@PathVariable("id") Integer id,
                                                  @RequestBody UserProjectDTO userProjectDTO,
-                                                 Principal principal) {
+                                                 Principal principal,
+                                                 Authentication authentication) {
         if (id.equals(userProjectDTO.getId())) {
-            UserProjectDTO updatedUserProjectDTO = userProjectService.update(principal.getName(), userProjectDTO);
+            UserProjectDTO updatedUserProjectDTO = userProjectService.update(principal.getName(),
+                    authentication.getAuthorities(),
+                    userProjectDTO);
             return ResponseEntity.ok(updatedUserProjectDTO);
         } else throw new UserProjectException(UserProjectException.FailReason.INVALID_IDS);
     }

@@ -4,6 +4,7 @@ import com.project.java.prz.common.core.domain.general.Project;
 import com.project.java.prz.common.core.domain.general.SettingName;
 import com.project.java.prz.common.core.domain.general.UserDetail;
 import com.project.java.prz.common.core.domain.general.UserProject;
+import com.project.java.prz.common.core.domain.security.RoleType;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
 import com.project.java.prz.common.core.dto.UserSettingDTO;
@@ -14,12 +15,14 @@ import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -92,37 +95,26 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     }
 
-    private LocalDateTime calculateScheduledCompletionDate() {
-        LocalDateTime now = LocalDateTime.now(clock);
-        int year = now.getYear();
-        int month = now.getMonth().getValue();
-
-        if (month >= 2 && month <= 6) {
-            return LocalDateTime.of(year, 7, 10, 12, 0, 0);
-        } else return LocalDateTime.of(year + 1, 2, 10, 12, 0, 0);
-
-    }
-
     private void isExisting(Project project) {
         if (project == null)
             throw new ProjectException(ProjectException.FailReason.PROJECT_DOES_NOT_EXIST);
     }
 
     @Override
-    public void deleteById(String login, Integer id) {
+    public void deleteById(String login, Collection<? extends GrantedAuthority> authorities, Integer id) {
         UserDetailDTO userDetailsDTO = getUserDetails(login);
 
-        if (isAdmin(userDetailsDTO) || isPossibleToRemove(id, userDetailsDTO)) {
+        if (isAdmin(authorities) || isPossibleToRemove(id, userDetailsDTO)) {
             userProjectRepository.delete(id);
         } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
     }
 
     @Override
-    public UserProjectDTO update(String login, UserProjectDTO userProjectDTO) {
+    public UserProjectDTO update(String login, Collection<? extends GrantedAuthority> authorities, UserProjectDTO userProjectDTO) {
         UserDetailDTO userDetailsDTO = getUserDetails(login);
         UserProject userProject;
 
-        if (isAdmin(userDetailsDTO)) {
+        if (isAdmin(authorities)) {
             userProject = prepareToUpdateByAdmin(userProjectDTO);
         } else {
             userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
@@ -165,8 +157,9 @@ public class UserProjectServiceImpl implements UserProjectService {
         return UserProjectMapper.INSTANCE.convertToEntity(dto);
     }
 
-    private boolean isAdmin(UserDetailDTO userDetailsDTO) {
-        if (userDetailsDTO.getProfessorDTO() == null) {
+    private boolean isAdmin(Collection<? extends GrantedAuthority> authorities) {
+        if (authorities.stream()
+                .anyMatch(authority -> authority.getAuthority().equals(RoleType.ROLE_ADMIN.toString()))) {
             return true;
         } else return false;
     }

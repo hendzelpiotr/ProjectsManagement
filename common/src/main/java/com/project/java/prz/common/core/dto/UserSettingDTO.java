@@ -14,7 +14,6 @@ public class UserSettingDTO {
 
     private Integer id;
     private String value;
-    private boolean global;
     private SettingDTO settingDTO;
 
 }

@@ -24,9 +24,6 @@ public class UserDetail {
     private String name;
     private String surname;
     private Integer laboratoryGroup;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "professor_login")
-    private UserDetail professor;
     @OneToOne(mappedBy = "userDetail")
     @JsonIgnore
     private UserProject userProject;
