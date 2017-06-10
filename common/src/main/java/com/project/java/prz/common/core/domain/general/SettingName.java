@@ -15,4 +15,5 @@ public enum SettingName {
     }
 
     private String settingName;
+
 }

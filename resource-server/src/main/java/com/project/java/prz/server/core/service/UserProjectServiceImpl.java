@@ -1,13 +1,16 @@
 package com.project.java.prz.server.core.service;
 
-import com.project.java.prz.common.core.domain.general.*;
+import com.project.java.prz.common.core.domain.general.Project;
+import com.project.java.prz.common.core.domain.general.SettingName;
+import com.project.java.prz.common.core.domain.general.UserDetail;
+import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
+import com.project.java.prz.common.core.dto.UserSettingDTO;
 import com.project.java.prz.common.core.exception.ProjectException;
 import com.project.java.prz.common.core.exception.UserProjectException;
 import com.project.java.prz.common.core.mapper.UserDetailMapper;
 import com.project.java.prz.common.core.mapper.UserProjectMapper;
-import com.project.java.prz.server.core.dao.UserSettingDao;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private UserProjectRepository userProjectRepository;
 
     @Autowired
-    private UserSettingDao userSettingDao;
+    private UserSettingService userSettingService;
 
     @Override
     public List<UserProjectDTO> getAll() {
@@ -146,13 +149,9 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     private LocalDate getScheduledCompletionDate(UserProject dbUserProject) {
         UserDetail userDetail = dbUserProject.getUserDetail();
-        UserSetting foundUserSetting = userDetail.getUserSettings()
-                .stream()
-                .filter(userSetting -> (userSetting.getSetting().getName().getSettingName().equals(SettingName.SCHEDULED_COMPLETION_DATE.getSettingName())))
-                .findFirst()
-                .orElse(userSettingDao.getGlobalSetting(SettingName.SCHEDULED_COMPLETION_DATE));
+        UserSettingDTO userSetting = userSettingService.getUserSettingByName(userDetail.getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
 
-        return LocalDate.parse(foundUserSetting.getValue());
+        return LocalDate.parse(userSetting.getValue());
     }
 
     private boolean isAfterScheduledCompletionDateTime(LocalDate date) {
@@ -176,7 +175,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
 
         return id.equals(userProject.getId())
-                //TODO && !isAfterScheduledCompletionDateTime(userProject.getScheduledCompletionDateTime())
+                && !isAfterScheduledCompletionDateTime(getScheduledCompletionDate(userProject))
                 && LocalDateTime.now(clock).isBefore(userProject.getDateTimeOfProjectSelection().plusDays(14));
     }
 

@@ -2,6 +2,7 @@ package com.project.java.prz.common.core.domain.general;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.project.java.prz.common.core.converter.SettingNameConverter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,7 @@ public class Setting {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = SettingNameConverter.class)
     private SettingName name;
     @NotNull
     private String dataType;
