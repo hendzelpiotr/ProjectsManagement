@@ -141,7 +141,7 @@ public class UserProjectServiceImpl implements UserProjectService {
 
     private LocalDate getScheduledCompletionDate(UserProject dbUserProject) {
         UserDetail userDetail = dbUserProject.getUserDetail();
-        UserSettingDTO userSetting = userSettingService.getUserSettingByName(userDetail.getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
+        UserSettingDTO userSetting = userSettingService.getUserSettingBySettingName(userDetail.getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
 
         return LocalDate.parse(userSetting.getValue());
     }

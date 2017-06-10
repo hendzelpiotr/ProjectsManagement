@@ -8,6 +8,7 @@ import com.project.java.prz.common.core.domain.general.UserSetting;
  */
 public interface UserSettingDao {
 
-    UserSetting findGlobalUserSettingByName(SettingName settingName);
+    UserSetting findGlobalUserSettingBySettingName(SettingName settingName);
 
+    UserSetting findUserSettingBySettingNameAndUserDetailLogin(SettingName settingName, String login);
 }

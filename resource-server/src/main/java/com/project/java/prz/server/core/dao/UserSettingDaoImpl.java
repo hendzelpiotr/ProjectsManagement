@@ -5,6 +5,7 @@ import com.project.java.prz.common.core.domain.general.UserSetting;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -18,10 +19,22 @@ public class UserSettingDaoImpl implements UserSettingDao {
     private EntityManager entityManager;
 
     @Override
-    public UserSetting findGlobalUserSettingByName(SettingName settingName) {
+    public UserSetting findGlobalUserSettingBySettingName(SettingName settingName) {
         TypedQuery<UserSetting> query = entityManager.createQuery("select us from UserSetting us join us.setting s where us.userDetail is null and s.name = :settingName", UserSetting.class);
         query.setParameter("settingName", settingName);
         return query.getSingleResult();
+    }
+
+    @Override
+    public UserSetting findUserSettingBySettingNameAndUserDetailLogin(SettingName settingName, String login) {
+        TypedQuery<UserSetting> query = entityManager.createQuery("select us from UserSetting us join us.setting s where us.userDetail.login = :login and s.name = :settingName", UserSetting.class);
+        query.setParameter("settingName", settingName);
+        query.setParameter("login", login);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return findGlobalUserSettingBySettingName(SettingName.SCHEDULED_COMPLETION_DATE);
+        }
     }
 
 }

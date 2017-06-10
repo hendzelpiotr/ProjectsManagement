@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface UserSettingService {
 
-    UserSettingDTO getUserSettingByName(List<UserSetting> userSettingList, SettingName settingName);
+    UserSettingDTO getUserSettingBySettingName(List<UserSetting> userSettingList, SettingName settingName);
 
     List<UserSettingDTO> getUserSettings(String login);
 
-    UserSettingDTO getUserSettingByNameAndLogin(String login, SettingName scheduledCompletionDate);
+    UserSettingDTO getUserSettingBySettingNameAndUserDetailLogin(String login, SettingName scheduledCompletionDate);
 
     boolean isAfterScheduledCompletionDateTime(LocalDate date);
 }

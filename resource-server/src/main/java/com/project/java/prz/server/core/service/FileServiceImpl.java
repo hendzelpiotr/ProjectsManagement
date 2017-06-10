@@ -43,19 +43,22 @@ public class FileServiceImpl implements FileService {
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
         UserDetailDTO userDetailsDTO = getUserDetails(login);
-        String directoryPath;
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
+        LocalDate scheduledCompletionDate;
 
-        UserSettingDTO scheduledCompletionDateSetting = userSettingService.getUserSettingByNameAndLogin(userDetailsDTO.getLogin(), SettingName.SCHEDULED_COMPLETION_DATE);
-        LocalDate scheduledCompletionDate = LocalDate.parse(scheduledCompletionDateSetting.getValue());
+        if (userProject != null) {
+            UserSettingDTO scheduledCompletionDateSetting = userSettingService.getUserSettingBySettingName(userProject.getUserDetail().getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
+            scheduledCompletionDate = LocalDate.parse(scheduledCompletionDateSetting.getValue());
+        } else throw new FileException(YOU_CAN_NOT_SAVE_FILE);
 
         if (!userSettingService.isAfterScheduledCompletionDateTime(scheduledCompletionDate)) {
+            String directoryPath;
             directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
             makeSureThatDirectoryExist(directoryPath);
 
             Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
             Files.write(path, fileAsByteArray);
 
-            UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
             updateSourceFileUploadedFlag(userProject);
         } else throw new FileException(YOU_CAN_NOT_SAVE_FILE);
     }
