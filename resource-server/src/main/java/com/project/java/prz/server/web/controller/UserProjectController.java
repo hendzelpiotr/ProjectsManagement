@@ -5,6 +5,7 @@ import com.project.java.prz.common.core.exception.UserProjectException;
 import com.project.java.prz.server.core.service.UserProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,18 +23,21 @@ public class UserProjectController {
     private UserProjectService userProjectService;
 
     @GetMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<UserProjectDTO>> getAll() {
         List<UserProjectDTO> userProjectDTOs = userProjectService.getAll();
         return ResponseEntity.ok(userProjectDTOs);
     }
 
     @GetMapping("my")
+    @Secured("ROLE_STUDENT")
     public ResponseEntity<UserProjectDTO> getUserProjectOfCurrentlyLoggedInUser(Principal principal) {
         UserProjectDTO userProjectDTO = userProjectService.getUserProjectOfCurrentlyLoggedInUser(principal.getName());
         return ResponseEntity.ok(userProjectDTO);
     }
 
     @PostMapping
+    @Secured("ROLE_STUDENT")
     public ResponseEntity<UserProjectDTO> assignProjectToStudent(@RequestBody UserProjectDTO userProjectDTO, Principal principal) {
         UserProjectDTO createdUserProjectDTO = userProjectService.assignProjectToStudent(principal.getName(), userProjectDTO.getProjectDTO().getId());
         return ResponseEntity.ok(createdUserProjectDTO);

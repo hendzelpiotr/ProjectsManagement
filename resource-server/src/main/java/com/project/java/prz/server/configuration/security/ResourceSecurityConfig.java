@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -35,10 +34,6 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("api/projects", "/api/user-details").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user-projects").hasAuthority("ROLE_STUDENT")
-                .antMatchers(HttpMethod.GET, "/api/user-projects/my", "/api/files").hasAuthority("ROLE_STUDENT")
-                .antMatchers(HttpMethod.GET, "/api/user-projects").hasAuthority("ROLE_ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
     }
 
