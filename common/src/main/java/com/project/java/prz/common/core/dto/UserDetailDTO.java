@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * Created by phendzel on 6/1/2017.
  */
@@ -16,5 +18,6 @@ public class UserDetailDTO {
     private String name;
     private String surname;
     private Integer laboratoryGroup;
+    private List<UserSettingDTO> userSettingDTOs;
 
 }
