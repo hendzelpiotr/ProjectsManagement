@@ -20,6 +20,8 @@ public class GeneralExceptionHandler implements BaseExceptionHandler<GeneralExce
     @ExceptionHandler(value = GeneralException.class)
     public ResponseEntity<ApiResponseError> handleException(GeneralException e) {
         switch (e.getFailReason()) {
+            case INVALID_IDS:
+                return returnApiResponseError(e, HttpStatus.BAD_REQUEST);
             case RESOURCE_NOT_FOUND:
                 return returnApiResponseError(e, HttpStatus.NOT_FOUND);
             case IO_EXCEPTION:

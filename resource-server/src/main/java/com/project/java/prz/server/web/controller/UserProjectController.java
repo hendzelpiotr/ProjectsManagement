@@ -49,7 +49,7 @@ public class UserProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<UserProjectDTO> update(@PathVariable("id") Integer id,
                                                  @RequestBody UserProjectDTO userProjectDTO,
                                                  Principal principal,

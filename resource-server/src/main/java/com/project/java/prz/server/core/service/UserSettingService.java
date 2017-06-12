@@ -18,5 +18,9 @@ public interface UserSettingService {
 
     UserSettingDTO getUserSettingBySettingNameAndUserDetailLogin(String login, SettingName scheduledCompletionDate);
 
+    List<UserSettingDTO> getAllGlobalUserSettings();
+
+    UserSettingDTO updateUserSetting(UserSettingDTO userSettingDTO, Integer id);
+
     boolean isAfterScheduledCompletionDateTime(LocalDate date);
 }

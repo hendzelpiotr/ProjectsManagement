@@ -1,12 +1,12 @@
 package com.project.java.prz.server.web.controller;
 
 import com.project.java.prz.common.core.dto.UserSettingDTO;
+import com.project.java.prz.common.core.exception.GeneralException;
 import com.project.java.prz.server.core.service.UserSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,5 +26,22 @@ public class UserSettingController {
         List<UserSettingDTO> userSettingDTOs = userSettingService.getUserSettings(principal.getName());
         return ResponseEntity.ok(userSettingDTOs);
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping
+    public ResponseEntity<List<UserSettingDTO>> getAllGlobalUserSettings() {
+        List<UserSettingDTO> userSettingDTOs = userSettingService.getAllGlobalUserSettings();
+        return ResponseEntity.ok(userSettingDTOs);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping("{id}")
+    public ResponseEntity<UserSettingDTO> updateUserSetting(@PathVariable("id") Integer id, @RequestBody UserSettingDTO userSettingDTO) {
+        if (id.equals(userSettingDTO.getId())) {
+            UserSettingDTO updatedUserSettingDTO = userSettingService.updateUserSetting(userSettingDTO, id);
+            return ResponseEntity.ok(updatedUserSettingDTO);
+        } else throw new GeneralException(GeneralException.FailReason.INVALID_IDS);
+    }
+
 
 }

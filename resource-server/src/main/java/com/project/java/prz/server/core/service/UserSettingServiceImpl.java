@@ -71,6 +71,21 @@ public class UserSettingServiceImpl implements UserSettingService {
     }
 
     @Override
+    public List<UserSettingDTO> getAllGlobalUserSettings() {
+        List<UserSetting> allGlobalUserSettings = userSettingDao.findAllGlobalUserSettings();
+        return UserSettingMapper.INSTANCE.convertToDTOs(allGlobalUserSettings);
+    }
+
+    @Override
+    public UserSettingDTO updateUserSetting(UserSettingDTO userSettingDTO, Integer id) {
+        UserSetting userSetting = UserSettingMapper.INSTANCE.convertToEntity(userSettingDTO);
+
+        UserSetting updatedUserSetting = userSettingRepository.save(userSetting);
+
+        return UserSettingMapper.INSTANCE.convertToDTO(updatedUserSetting);
+    }
+
+    @Override
     public boolean isAfterScheduledCompletionDateTime(LocalDate date) {
         if (date == null) {
             return false;
