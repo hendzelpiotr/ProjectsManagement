@@ -15,5 +15,6 @@ public class UserSettingDTO {
     private Integer id;
     private String value;
     private SettingDTO settingDTO;
+    private UserDetailDTO userDetailDTO;
 
 }

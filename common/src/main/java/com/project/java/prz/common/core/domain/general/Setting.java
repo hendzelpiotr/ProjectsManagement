@@ -1,6 +1,5 @@
 package com.project.java.prz.common.core.domain.general;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.java.prz.common.core.converter.SettingNameConverter;
 import lombok.Getter;
@@ -28,7 +27,6 @@ public class Setting {
     @NotNull
     private String dataType;
     @OneToMany(mappedBy = "setting")
-    @JsonIgnore
     private List<UserSetting> userSettings;
 
 }

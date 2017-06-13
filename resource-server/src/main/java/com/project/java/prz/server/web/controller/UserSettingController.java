@@ -35,6 +35,20 @@ public class UserSettingController {
     }
 
     @Secured("ROLE_ADMIN")
+    @GetMapping("user-details/{login:.+}")
+    public ResponseEntity<List<UserSettingDTO>> getUserSettingsByLogin(@PathVariable("login") String login) {
+        List<UserSettingDTO> userSettings = userSettingService.getUserSettings(login);
+        return ResponseEntity.ok(userSettings);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping("user-details/{login:.+}")
+    public ResponseEntity<UserSettingDTO> updateUserSettingByUserDetailLogin(@PathVariable("login") String login, @RequestBody UserSettingDTO userSettingDTO) {
+        UserSettingDTO updatedUserSettingDTO = userSettingService.saveOrUpdate(login, userSettingDTO);
+        return ResponseEntity.ok(updatedUserSettingDTO);
+    }
+
+    @Secured("ROLE_ADMIN")
     @PutMapping("{id}")
     public ResponseEntity<UserSettingDTO> updateUserSetting(@PathVariable("id") Integer id, @RequestBody UserSettingDTO userSettingDTO) {
         if (id.equals(userSettingDTO.getId())) {
@@ -42,6 +56,5 @@ public class UserSettingController {
             return ResponseEntity.ok(updatedUserSettingDTO);
         } else throw new GeneralException(GeneralException.FailReason.INVALID_IDS);
     }
-
 
 }

@@ -22,5 +22,9 @@ public interface UserSettingService {
 
     UserSettingDTO updateUserSetting(UserSettingDTO userSettingDTO, Integer id);
 
+    List<UserSettingDTO> saveOrUpdateUserSettings(List<UserSettingDTO> userSettingDTOs);
+
     boolean isAfterScheduledCompletionDateTime(LocalDate date);
+
+    UserSettingDTO saveOrUpdate(String login, UserSettingDTO userSettingDTO);
 }

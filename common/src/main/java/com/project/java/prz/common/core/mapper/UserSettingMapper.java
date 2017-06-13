@@ -19,12 +19,14 @@ public interface UserSettingMapper {
     UserSettingMapper INSTANCE = Mappers.getMapper(UserSettingMapper.class);
 
     @Mappings({
-            @Mapping(source = "setting", target = "settingDTO")
+            @Mapping(source = "setting", target = "settingDTO"),
+            @Mapping(source = "userDetail", target = "userDetailDTO")
     })
     UserSettingDTO convertToDTO(UserSetting userSetting);
 
     @Mappings({
-            @Mapping(source = "settingDTO", target = "setting")
+            @Mapping(source = "settingDTO", target = "setting"),
+            @Mapping(source = "userDetailDTO", target = "userDetail")
     })
     UserSetting convertToEntity(UserSettingDTO userSettingDTO);
 

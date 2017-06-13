@@ -4,7 +4,7 @@ import com.project.java.prz.common.core.domain.general.UserDetail;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.UserDetailsException;
 import com.project.java.prz.common.core.mapper.UserDetailMapper;
-import com.project.java.prz.server.core.repository.UserDetailsRepository;
+import com.project.java.prz.server.core.repository.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import static com.project.java.prz.common.core.exception.UserDetailsException.Fa
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserDetailsRepository userDetailsRepository;
+    private UserDetailRepository userDetailsRepository;
 
     @Override
     public UserDetailDTO getOne(String login) {

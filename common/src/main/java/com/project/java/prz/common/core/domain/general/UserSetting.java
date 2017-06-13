@@ -1,6 +1,5 @@
 package com.project.java.prz.common.core.domain.general;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,6 @@ public class UserSetting {
     private Setting setting;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_detail_id")
-    @JsonIgnore
     private UserDetail userDetail;
 
 }

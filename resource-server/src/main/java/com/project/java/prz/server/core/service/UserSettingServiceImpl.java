@@ -2,11 +2,15 @@ package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.Setting;
 import com.project.java.prz.common.core.domain.general.SettingName;
+import com.project.java.prz.common.core.domain.general.UserDetail;
 import com.project.java.prz.common.core.domain.general.UserSetting;
 import com.project.java.prz.common.core.dto.UserSettingDTO;
+import com.project.java.prz.common.core.exception.UserSettingException;
+import com.project.java.prz.common.core.mapper.SettingMapper;
 import com.project.java.prz.common.core.mapper.UserSettingMapper;
 import com.project.java.prz.server.core.dao.UserSettingDao;
 import com.project.java.prz.server.core.repository.SettingRepository;
+import com.project.java.prz.server.core.repository.UserDetailRepository;
 import com.project.java.prz.server.core.repository.UserSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,9 @@ public class UserSettingServiceImpl implements UserSettingService {
 
     @Autowired
     private SettingRepository settingRepository;
+
+    @Autowired
+    private UserDetailRepository userDetailRepository;
 
     @Autowired
     private Clock clock;
@@ -86,11 +93,39 @@ public class UserSettingServiceImpl implements UserSettingService {
     }
 
     @Override
+    public List<UserSettingDTO> saveOrUpdateUserSettings(List<UserSettingDTO> userSettingDTOs) {
+        List<UserSetting> userSettings = UserSettingMapper.INSTANCE.convertToEntities(userSettingDTOs);
+
+        List<UserSetting> savedUserSettings = userSettingRepository.save(userSettings);
+
+        return UserSettingMapper.INSTANCE.convertToDTOs(savedUserSettings);
+    }
+
+    @Override
     public boolean isAfterScheduledCompletionDateTime(LocalDate date) {
         if (date == null) {
             return false;
         }
         return LocalDate.now(clock).isAfter(date);
+    }
+
+    @Override
+    public UserSettingDTO saveOrUpdate(String login, UserSettingDTO userSettingDTO) {
+        UserSetting userSetting = userSettingDao.findUserSettingBySettingNameAndUserDetailLogin(userSettingDTO.getSettingDTO().getName(), login);
+
+        if (userSetting.getUserDetail() == null) {
+            userSetting = new UserSetting();
+            userSetting.setSetting(SettingMapper.INSTANCE.convertToEntity(userSettingDTO.getSettingDTO()));
+            UserDetail userDetail = userDetailRepository.findOne(login);
+            userSetting.setUserDetail(userDetail);
+            userSetting.setValue(userSettingDTO.getValue());
+        } else if (userSetting.getId().equals(userSettingDTO.getId())) {
+            userSetting.setValue(userSettingDTO.getValue());
+        } else throw new UserSettingException(UserSettingException.FailReason.YOU_CAN_NOT_UPDATE_USER_SETTING);
+
+        UserSetting savedUserSetting = userSettingRepository.save(userSetting);
+        
+        return UserSettingMapper.INSTANCE.convertToDTO(savedUserSetting);
     }
 
 }

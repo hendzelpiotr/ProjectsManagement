@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SettingMapper {
 
-    UserSettingMapper INSTANCE = Mappers.getMapper(UserSettingMapper.class);
+    SettingMapper INSTANCE = Mappers.getMapper(SettingMapper.class);
 
     SettingDTO convertToDTO(Setting setting);
 
