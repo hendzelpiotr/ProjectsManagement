@@ -5,6 +5,7 @@ import com.project.java.prz.common.core.exception.GeneralException;
 import com.project.java.prz.server.core.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,11 +27,18 @@ public class UserDetailsController {
     }
 
     @PutMapping("me")
+    @Secured("ROLE_STUDENT")
     public ResponseEntity<UserDetailDTO> updateInfoAboutCurrentlyLoggedInUser(@RequestBody UserDetailDTO userDetailDTO, Principal principal) {
         if(principal.getName().equals(userDetailDTO.getLogin())) {
             UserDetailDTO updatedUserDetailDTO = userDetailsService.update(userDetailDTO);
             return ResponseEntity.ok(updatedUserDetailDTO);
         } else throw new GeneralException(GeneralException.FailReason.INVALID_IDS);
+    }
+
+    @GetMapping("me")
+    public ResponseEntity<UserDetailDTO> getCurrentlyLoggedInUserDetail(Principal principal) {
+        UserDetailDTO userDetailDTO = userDetailsService.getOne(principal.getName());
+        return ResponseEntity.ok(userDetailDTO);
     }
 
 }
