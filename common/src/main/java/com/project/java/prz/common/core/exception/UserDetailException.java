@@ -6,15 +6,16 @@ import lombok.Getter;
  * Created by Piotr on 04.06.2017.
  */
 @Getter
-public class UserDetailsException extends BaseException {
+public class UserDetailException extends BaseException {
 
-    public UserDetailsException(FailReason failReason) {
+    public UserDetailException(FailReason failReason) {
         this.failReason = failReason;
     }
 
     private FailReason failReason;
 
     public enum FailReason {
-        USER_DETAILS_ALREADY_EXISTS
+        USER_DETAIL_DOES_NOT_EXIST,
+        USER_DETAIL_ALREADY_EXISTS
     }
 }

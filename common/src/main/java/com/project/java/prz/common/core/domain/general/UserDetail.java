@@ -26,6 +26,7 @@ public class UserDetail {
     private String name;
     private String surname;
     private Integer laboratoryGroup;
+    private Integer studentNumber;
     @OneToOne(mappedBy = "userDetail")
     private UserProject userProject;
     @OneToMany(mappedBy = "userDetail")

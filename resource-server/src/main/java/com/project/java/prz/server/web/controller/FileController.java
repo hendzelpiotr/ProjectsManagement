@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,15 +39,24 @@ public class FileController {
     }
 
     @GetMapping(value = "my", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("#oauth2.hasScope('read')")
     @Secured("ROLE_STUDENT")
     public ResponseEntity<byte[]> getDownloadData(Principal principal) throws IOException {
-
         byte[] data = fileService.readZipFile(principal.getName());
 
         return ResponseEntity
                 .ok()
                 .header("Filename", principal.getName() + ".zip")
+                .body(data);
+    }
+
+    @GetMapping(value = "{login:.+}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<byte[]> getDownloadFileForUserDetail(@PathVariable("login") String login) throws IOException {
+        byte[] data = fileService.readZipFile(login);
+
+        return ResponseEntity
+                .ok()
+                .header("Filename", login + ".zip")
                 .body(data);
     }
 

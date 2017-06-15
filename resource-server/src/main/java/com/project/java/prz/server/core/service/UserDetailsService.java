@@ -11,4 +11,6 @@ public interface UserDetailsService {
 
     UserDetailDTO createNew(UserDetailDTO userDetailsDTO);
 
+    UserDetailDTO update(UserDetailDTO userDetailDTO);
+
 }
