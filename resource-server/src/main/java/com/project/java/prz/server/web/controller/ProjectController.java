@@ -40,4 +40,12 @@ public class ProjectController {
             return ResponseEntity.ok(updatedProject);
         } else throw new GeneralException(GeneralException.FailReason.INVALID_IDS);
     }
+
+    @Secured("ROLE_ADMIN")
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable("id") Integer id) {
+        projectService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

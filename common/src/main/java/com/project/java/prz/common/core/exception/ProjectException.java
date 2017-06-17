@@ -15,7 +15,8 @@ public class ProjectException extends BaseException {
     private FailReason failReason;
 
     public enum FailReason {
-        PROJECT_DOES_NOT_EXIST
+        PROJECT_DOES_NOT_EXIST,
+        PROJECT_CAN_NOT_BE_REMOVED
     }
 
 }

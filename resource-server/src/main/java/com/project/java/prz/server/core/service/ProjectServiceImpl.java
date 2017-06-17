@@ -7,6 +7,7 @@ import com.project.java.prz.common.core.mapper.ProjectMapper;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -45,9 +46,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Integer id) {
-        boolean projectExists = projectRepository.exists(id);
-        if (projectExists) {
-            projectRepository.delete(id);
+        Project project = projectRepository.findOne(id);
+        if (project != null) {
+            if (CollectionUtils.isEmpty(project.getUserProjects())) {
+                projectRepository.delete(id);
+            } else throw new ProjectException(ProjectException.FailReason.PROJECT_CAN_NOT_BE_REMOVED);
         } else throw new ProjectException(ProjectException.FailReason.PROJECT_DOES_NOT_EXIST);
     }
 
