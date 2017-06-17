@@ -1,0 +1,3 @@
+ALTER TABLE user_details
+  MODIFY name VARCHAR(100),
+  MODIFY surname VARCHAR(100);

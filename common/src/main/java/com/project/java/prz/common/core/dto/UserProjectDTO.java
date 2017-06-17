@@ -23,20 +23,15 @@ public class UserProjectDTO {
     private String mark;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern="MM/dd/yyyy HH:mm")
-    private LocalDateTime completionDateTime;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern="MM/dd/yyyy HH:mm")
-    private LocalDateTime datetimeOfProjectSelection;
+    @JsonFormat(pattern = "MM/dd/yyyy HH:mm")
+    private LocalDateTime dateTimeOfProjectSelection;
     private String programmingLanguage;
     private String technologies;
     private String database;
     private String additionalInformation;
     private String repositoryLink;
     private boolean sourceFilesUploaded;
-    private boolean readyToGrade;
-    private UserDTO userDTO;
+    private UserDetailDTO userDetailDTO;
     private ProjectDTO projectDTO;
 
 }

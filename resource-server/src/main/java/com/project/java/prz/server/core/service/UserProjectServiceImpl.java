@@ -1,23 +1,29 @@
 package com.project.java.prz.server.core.service;
 
 import com.project.java.prz.common.core.domain.general.Project;
+import com.project.java.prz.common.core.domain.general.SettingName;
+import com.project.java.prz.common.core.domain.general.UserDetail;
 import com.project.java.prz.common.core.domain.general.UserProject;
 import com.project.java.prz.common.core.domain.security.RoleType;
-import com.project.java.prz.common.core.dto.UserDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.dto.UserProjectDTO;
+import com.project.java.prz.common.core.dto.UserSettingDTO;
 import com.project.java.prz.common.core.exception.ProjectException;
 import com.project.java.prz.common.core.exception.UserProjectException;
+import com.project.java.prz.common.core.mapper.UserDetailMapper;
 import com.project.java.prz.common.core.mapper.UserProjectMapper;
 import com.project.java.prz.server.core.repository.ProjectRepository;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Piotr on 17.04.2017.
@@ -30,7 +36,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private Clock clock;
 
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -38,47 +44,43 @@ public class UserProjectServiceImpl implements UserProjectService {
     @Autowired
     private UserProjectRepository userProjectRepository;
 
+    @Autowired
+    private UserSettingService userSettingService;
+
     @Override
     public List<UserProjectDTO> getAll() {
         List<UserProject> userProjects = userProjectRepository.findAll();
-        List<UserProjectDTO> userProjectDTOs = UserProjectMapper.INSTANCE.convertToDTOs(userProjects);
-
-        userProjectDTOs = userProjectDTOs.stream().map(userProjectDTO -> {
-            userProjectDTO.setUserDTO(userService.getOne(userProjectDTO.getUserDTO().getId()));
-            return userProjectDTO;
-        }).collect(Collectors.toList());
-
-        return userProjectDTOs;
+        return UserProjectMapper.INSTANCE.convertToDTOs(userProjects);
     }
 
     @Override
     public UserProjectDTO getUserProjectOfCurrentlyLoggedInUser(String login) {
-        UserDTO userDTO = getUser(login);
-        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
 
         if (userProject != null) {
             UserProjectDTO userProjectDTO = UserProjectMapper.INSTANCE.convertToDTO(userProject);
-            userProjectDTO.setUserDTO(userDTO);
+            userProjectDTO.setUserDetailDTO(userDetailsDTO);
             return userProjectDTO;
         } else throw new UserProjectException(UserProjectException.FailReason.USER_PROJECT_NOT_FOUND);
     }
 
     @Override
     public UserProjectDTO assignProjectToStudent(String login, Integer projectId) {
-        UserDTO userDTO = getUser(login);
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
         Project project = projectRepository.getOne(projectId);
 
         isExisting(project);
 
         Integer availableProjectsCounter = project.getAvailableProjectsCounter();
 
-        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
         if (userProject == null
                 && (availableProjectsCounter == null || availableProjectsCounter > 0)) {
             UserProject userProjectToSave = new UserProject();
             userProjectToSave.setProject(project);
-            userProjectToSave.setUserId(userDTO.getId());
-            userProjectToSave.setDatetimeOfProjectSelection(LocalDateTime.now(clock));
+            userProjectToSave.setUserDetail(UserDetailMapper.INSTANCE.convertToEntity(userDetailsDTO));
+            userProjectToSave.setDateTimeOfProjectSelection(LocalDateTime.now(clock));
             userProjectToSave = userProjectRepository.save(userProjectToSave);
 
             if (availableProjectsCounter != null) {
@@ -99,29 +101,26 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     @Override
-    public void deleteById(String login, Integer id) {
-        UserDTO userDTO = getUser(login);
+    public void deleteById(String login, Collection<? extends GrantedAuthority> authorities, Integer id) {
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
 
-        if (isAdmin(userDTO) || isPossibleToRemove(id, userDTO)) {
+        if (isAdmin(authorities) || isPossibleToRemove(id, userDetailsDTO)) {
             userProjectRepository.delete(id);
         } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_ABANDON_PROJECT);
     }
 
     @Override
-    public UserProjectDTO update(String login, UserProjectDTO userProjectDTO) {
-        UserDTO userDTO = getUser(login);
-        UserProject userProject = new UserProject();
+    public UserProjectDTO update(String login, Collection<? extends GrantedAuthority> authorities, UserProjectDTO userProjectDTO) {
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
+        UserProject userProject;
 
-        switch (userDTO.getRoleDTO().getName()) {
-            case ROLE_ADMIN:
-                userProject = prepareToUpdateByAdmin(userProjectDTO);
-                break;
-            case ROLE_STUDENT:
-                userProject = userProjectRepository.findByUserId(userDTO.getId());
-                if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
-                    userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
-                } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
-                break;
+        if (isAdmin(authorities)) {
+            userProject = prepareToUpdateByAdmin(userProjectDTO);
+        } else {
+            userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
+            if (userProject != null && userProject.getId().equals(userProjectDTO.getId())) {
+                userProject = prepareToUpdateByStudent(userProjectDTO, userProject);
+            } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
         }
 
         UserProject updatedUserProject = userProjectRepository.save(userProject);
@@ -129,47 +128,45 @@ public class UserProjectServiceImpl implements UserProjectService {
     }
 
     private UserProject prepareToUpdateByStudent(UserProjectDTO dto, UserProject dbUserProject) {
-        if (!dbUserProject.isReadyToGrade()) {
+        if (!userSettingService.isAfterScheduledCompletionDateTime(getScheduledCompletionDate(dbUserProject))) {
             dbUserProject.setProgrammingLanguage(dto.getProgrammingLanguage());
             dbUserProject.setTechnologies(dto.getTechnologies());
             dbUserProject.setDatabase(dto.getDatabase());
             dbUserProject.setRepositoryLink(dto.getRepositoryLink());
             dbUserProject.setAdditionalInformation(dto.getAdditionalInformation());
             dbUserProject.setSourceFilesUploaded(dto.isSourceFilesUploaded());
+            return dbUserProject;
         } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
-
-        if (dto.isReadyToGrade() && !dbUserProject.isReadyToGrade()) {
-            if (checkWhetherUserProjectIsReadyToGrade(dbUserProject)) {
-                dbUserProject.setReadyToGrade(dto.isReadyToGrade());
-                dbUserProject.setCompletionDateTime(LocalDateTime.now());
-            } else throw new UserProjectException(UserProjectException.FailReason.YOU_CAN_NOT_UPDATE_USER_PROJECT);
-        }
-
-        return dbUserProject;
     }
 
-    private Boolean checkWhetherUserProjectIsReadyToGrade(UserProject userProject) {
-        return userProject.isSourceFilesUploaded() && userProject.getTechnologies() != null && userProject.getProgrammingLanguage() != null;
+    private LocalDate getScheduledCompletionDate(UserProject dbUserProject) {
+        UserDetail userDetail = dbUserProject.getUserDetail();
+        UserSettingDTO userSetting = userSettingService.getUserSettingBySettingName(userDetail.getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
+
+        return LocalDate.parse(userSetting.getValue());
     }
 
     private UserProject prepareToUpdateByAdmin(UserProjectDTO dto) {
         return UserProjectMapper.INSTANCE.convertToEntity(dto);
     }
 
-    private boolean isAdmin(UserDTO userDTO) {
-        return RoleType.ROLE_ADMIN.equals(userDTO.getRoleDTO().getName());
+    private boolean isAdmin(Collection<? extends GrantedAuthority> authorities) {
+        if (authorities.stream()
+                .anyMatch(authority -> authority.getAuthority().equals(RoleType.ROLE_ADMIN.toString()))) {
+            return true;
+        } else return false;
     }
 
-    private boolean isPossibleToRemove(Integer id, UserDTO userDTO) {
-        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
+    private boolean isPossibleToRemove(Integer id, UserDetailDTO userDetailsDTO) {
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
 
         return id.equals(userProject.getId())
-                && userProject.getCompletionDateTime() == null
-                && LocalDateTime.now(clock).isBefore(userProject.getDatetimeOfProjectSelection().plusDays(14));
+                && !userSettingService.isAfterScheduledCompletionDateTime(getScheduledCompletionDate(userProject))
+                && LocalDateTime.now(clock).isBefore(userProject.getDateTimeOfProjectSelection().plusDays(14));
     }
 
-    private UserDTO getUser(String login) {
-        return userService.getOneByLogin(login);
+    private UserDetailDTO getUserDetails(String login) {
+        return userService.getOne(login);
     }
 
 }

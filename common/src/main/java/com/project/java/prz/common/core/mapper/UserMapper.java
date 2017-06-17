@@ -19,13 +19,11 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mappings({
-            @Mapping(source = "professor", target = "professorDTO"),
             @Mapping(source = "role", target = "roleDTO")
     })
     UserDTO convertToDTO(User user);
 
     @Mappings({
-            @Mapping(source = "professorDTO", target = "professor"),
             @Mapping(source = "roleDTO", target = "role")
     })
     User convertToEntity(UserDTO userDTO);

@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/**
- * Created by phendzel on 5/23/2017.
- */
 @SpringBootApplication(scanBasePackages = "com.project.java.prz.user")
 @EnableJpaRepositories(basePackages = "com.project.java.prz.user.core.repository")
 @EnableTransactionManagement
@@ -20,4 +17,3 @@ public class UserServiceRunner {
     }
 
 }
-

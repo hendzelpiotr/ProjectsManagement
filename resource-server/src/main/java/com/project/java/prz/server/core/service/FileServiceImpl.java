@@ -1,7 +1,10 @@
 package com.project.java.prz.server.core.service;
 
+import com.project.java.prz.common.core.domain.general.SettingName;
 import com.project.java.prz.common.core.domain.general.UserProject;
-import com.project.java.prz.common.core.dto.UserDTO;
+import com.project.java.prz.common.core.dto.UserDetailDTO;
+import com.project.java.prz.common.core.dto.UserSettingDTO;
+import com.project.java.prz.common.core.exception.FileException;
 import com.project.java.prz.server.core.repository.UserProjectRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+
+import static com.project.java.prz.common.core.exception.FileException.FailReason.YOU_CAN_NOT_SAVE_FILE;
 
 /**
  * Created by Piotr on 13.05.2017.
@@ -23,42 +29,53 @@ import java.nio.file.Paths;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
 
     @Autowired
     private UserProjectRepository userProjectRepository;
+
+    @Autowired
+    private UserSettingService userSettingService;
 
     @Value("${upload.destination.path}")
     private String destinationPath;
 
     @Override
     public void saveFile(byte[] fileAsByteArray, String extension, String login) throws IOException {
-        UserDTO userDTO = getUser(login);
-        String directoryPath;
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
+        UserProject userProject = userProjectRepository.findByUserDetailLogin(userDetailsDTO.getLogin());
+        LocalDate scheduledCompletionDate;
 
-        directoryPath = createUserDirectoryPathAsString(userDTO);
-        makeSureThatDirectoryExist(directoryPath);
+        if (userProject != null) {
+            UserSettingDTO scheduledCompletionDateSetting = userSettingService.getUserSettingBySettingName(userProject.getUserDetail().getUserSettings(), SettingName.SCHEDULED_COMPLETION_DATE);
+            scheduledCompletionDate = LocalDate.parse(scheduledCompletionDateSetting.getValue());
+        } else throw new FileException(YOU_CAN_NOT_SAVE_FILE);
 
-        Path path = Paths.get(createFilePathAsString(extension, userDTO, directoryPath));
-        Files.write(path, fileAsByteArray);
+        if (!userSettingService.isAfterScheduledCompletionDateTime(scheduledCompletionDate)) {
+            String directoryPath;
+            directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
+            makeSureThatDirectoryExist(directoryPath);
 
-        UserProject userProject = userProjectRepository.findByUserId(userDTO.getId());
-        updateSourceFileUploadedFlag(userProject);
+            Path path = Paths.get(createFilePathAsString(extension, userDetailsDTO, directoryPath));
+            Files.write(path, fileAsByteArray);
+
+            updateSourceFileUploadedFlag(userProject);
+        } else throw new FileException(YOU_CAN_NOT_SAVE_FILE);
     }
 
     @Override
     public byte[] readZipFile(String login) throws IOException {
-        UserDTO userDTO = getUser(login);
+        UserDetailDTO userDetailsDTO = getUserDetails(login);
 
-        String directoryPath = createUserDirectoryPathAsString(userDTO);
+        String directoryPath = createUserDirectoryPathAsString(userDetailsDTO);
         makeSureThatDirectoryExist(directoryPath);
 
-        Path path = Paths.get(createFilePathAsString("zip", userDTO, directoryPath));
+        Path path = Paths.get(createFilePathAsString("zip", userDetailsDTO, directoryPath));
         return Files.readAllBytes(path);
     }
 
-    private UserDTO getUser(String login) {
-        return userService.getOneByLogin(login);
+    private UserDetailDTO getUserDetails(String login) {
+        return userService.getOne(login);
     }
 
     private void updateSourceFileUploadedFlag(UserProject userProject) {
@@ -70,12 +87,12 @@ public class FileServiceImpl implements FileService {
         FileUtils.forceMkdir(new File(path));
     }
 
-    private String createUserDirectoryPathAsString(UserDTO userDTO) {
-        return destinationPath + userDTO.getLaboratoryGroup() + '\\' + userDTO.getName() + '_' + userDTO.getSurname() + '\\';
+    private String createUserDirectoryPathAsString(UserDetailDTO userDetailsDTO) {
+        return destinationPath + userDetailsDTO.getLaboratoryGroup() + '\\' + userDetailsDTO.getName() + '_' + userDetailsDTO.getSurname() + '\\';
     }
 
-    private String createFilePathAsString(String extension, UserDTO userDTO, String directoryPath) {
-        return directoryPath + userDTO.getLogin() + "." + extension;
+    private String createFilePathAsString(String extension, UserDetailDTO userDetailsDTO, String directoryPath) {
+        return directoryPath + userDetailsDTO.getLogin() + "." + extension;
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by phendzel on 5/24/2017.
+ * Created by Piotr on 03.06.2017.
  */
 @ControllerAdvice
 public class UserExceptionHandler implements BaseExceptionHandler<UserException> {
@@ -22,6 +22,11 @@ public class UserExceptionHandler implements BaseExceptionHandler<UserException>
         switch (e.getFailReason()) {
             case USER_NOT_FOUND:
                 return returnApiResponseError(e, HttpStatus.NOT_FOUND);
+            case USER_ALREADY_EXITS:
+            case USER_ALREADY_ENABLED:
+            case CAN_NOT_CREATE_USER:
+            case INVALID_IDS:
+                return returnApiResponseError(e, HttpStatus.BAD_REQUEST);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

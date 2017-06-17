@@ -10,7 +10,7 @@
     <modules>
         <module>resource-server</module>
         <module>common</module>
-        <module>authentication-server</module>
+        <module>authorization-server</module>
         <module>user-service</module>
     </modules>
 

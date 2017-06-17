@@ -1,12 +1,11 @@
 package com.project.java.prz.server.configuration.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -21,18 +20,20 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @EnableResourceServer
 public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
 
+    @Value("${oauth2.client-id}")
+    private String clientId;
+
+    @Value("${oauth2.client-secret}")
+    private String clientSecret;
+
+    @Value("${oauth2.check-token-url}")
+    private String checkTokenUrl;
+
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-        http.
-                sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
+        http
                 .authorizeRequests()
-                .antMatchers("api/projects").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user-projects").hasAuthority("ROLE_STUDENT")
-                .antMatchers(HttpMethod.GET, "/api/user-projects/my","/api/files").hasAuthority("ROLE_STUDENT")
-                .antMatchers(HttpMethod.GET, "/api/user-projects").hasAuthority("ROLE_ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/users").hasAuthority("ROLE_ADMIN")
+                .antMatchers("api/projects", "/api/user-details").permitAll()
                 .anyRequest().authenticated();
     }
 
@@ -45,9 +46,9 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
     @Primary
     public ResourceServerTokenServices tokenServices() {
         final RemoteTokenServices tokenServices = new RemoteTokenServices();
-        tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
-        tokenServices.setClientId("ResourceServer_PRZ_2017");
-        tokenServices.setClientSecret("zaq1@WSXzaq1@WSX");
+        tokenServices.setCheckTokenEndpointUrl(checkTokenUrl);
+        tokenServices.setClientSecret(clientSecret);
+        tokenServices.setClientId(clientId);
         return tokenServices;
     }
 

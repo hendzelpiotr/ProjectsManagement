@@ -16,7 +16,7 @@ public class GeneralException extends BaseException {
 
     public enum FailReason {
         IO_EXCEPTION,
-        RESOURCE_NOT_FOUND
+        INVALID_IDS, RESOURCE_NOT_FOUND
     }
 
 }
