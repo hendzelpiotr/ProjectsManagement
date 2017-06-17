@@ -11,4 +11,9 @@ public interface ProjectService {
 
     List<ProjectDTO> getAll();
 
+    ProjectDTO update(ProjectDTO projectDTO);
+
+    ProjectDTO create(ProjectDTO projectDTO);
+
+    void delete(Integer id);
 }
