@@ -4,3 +4,4 @@ target/
 *.iws
 *.iml
 *.ipr
+/mail-service/src/main/resources/application.properties
