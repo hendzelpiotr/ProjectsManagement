@@ -2,11 +2,13 @@ package com.project.java.prz.user.core.service;
 
 import com.project.java.prz.common.core.domain.security.RoleType;
 import com.project.java.prz.common.core.domain.security.User;
+import com.project.java.prz.common.core.dto.MailDTO;
 import com.project.java.prz.common.core.dto.RegistrationDTO;
 import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
+import com.project.java.prz.user.core.client.MailServiceClient;
 import com.project.java.prz.user.core.dao.UserDao;
 import com.project.java.prz.user.core.repository.RoleRepository;
 import com.project.java.prz.user.core.repository.UserRepository;
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private HttpService httpService;
+
+    @Autowired
+    private MailServiceClient mailServiceClient;
 
     @Value("${resource-server.url}")
     private String resourceServerUrl;
@@ -80,6 +85,12 @@ public class UserServiceImpl implements UserService {
             UserDetailDTO userDetailsDTO = new UserDetailDTO();
             userDetailsDTO.setLogin(user.getLogin());
             ResponseEntity responseEntity = httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
+
+            MailDTO mailDTO = new MailDTO();
+            mailDTO.setEmailOfRecipient(user.getLogin());
+            mailDTO.setBody("Twoje konto zostało aktywowane");
+            mailDTO.setSubject("Aktywacja konta");
+            mailServiceClient.sendSimpleMail(mailDTO);
 
             if (responseEntity.getStatusCode().equals(HttpStatus.CREATED)) {
                 return UserMapper.INSTANCE.convertToDTO(user);
