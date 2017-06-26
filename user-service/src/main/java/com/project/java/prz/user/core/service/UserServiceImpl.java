@@ -83,22 +83,30 @@ public class UserServiceImpl implements UserService {
             user.setEnabled(Boolean.TRUE);
             user = userRepository.save(user);
 
-            UserDetailDTO userDetailsDTO = new UserDetailDTO();
-            userDetailsDTO.setLogin(user.getLogin());
-            userDetailsDTO.setEmail(user.getEmail());
-            ResponseEntity responseEntity = httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
+            ResponseEntity responseEntity = createUserDetail(user);
 
-            MailDTO mailDTO = new MailDTO();
-            mailDTO.setEmailOfRecipient(user.getEmail());
-            mailDTO.setBody("Twoje konto zostało aktywowane");
-            mailDTO.setSubject("Aktywacja konta");
-            mailServiceClient.sendSimpleMail(mailDTO);
+            sendActivationMail(user);
 
             if (responseEntity.getStatusCode().equals(HttpStatus.CREATED)) {
                 return UserMapper.INSTANCE.convertToDTO(user);
             } else throw new UserException(UserException.FailReason.CAN_NOT_CREATE_USER);
 
         } else throw new UserException(UserException.FailReason.USER_ALREADY_ENABLED);
+    }
+
+    private ResponseEntity createUserDetail(User user) {
+        UserDetailDTO userDetailsDTO = new UserDetailDTO();
+        userDetailsDTO.setLogin(user.getLogin());
+        userDetailsDTO.setEmail(user.getEmail());
+        return httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
+    }
+
+    private void sendActivationMail(User user) {
+        MailDTO mailDTO = new MailDTO();
+        mailDTO.setEmailOfRecipient(user.getEmail());
+        mailDTO.setBody("Twoje konto zostało aktywowane");
+        mailDTO.setSubject("Aktywacja konta");
+        mailServiceClient.sendSimpleMail(mailDTO);
     }
 
     @Override
