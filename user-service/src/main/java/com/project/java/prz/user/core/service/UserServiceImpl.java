@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
             user = new User();
             user.setRole(roleRepository.findByName(RoleType.ROLE_STUDENT));
             user.setLogin(registrationDTO.getLogin());
+            user.setEmail(registrationDTO.getEmail());
             user.setPassword(encodePassword(registrationDTO.getPassword()));
             user.setEnabled(Boolean.FALSE);
 
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO enableUserAccount(Integer id, String login, UserDTO userDTO) {
+    public UserDTO enableUserAccount(Integer id, UserDTO userDTO) {
         User user = userRepository.findOne(id);
 
         if (!user.getEnabled()) {
@@ -84,10 +85,11 @@ public class UserServiceImpl implements UserService {
 
             UserDetailDTO userDetailsDTO = new UserDetailDTO();
             userDetailsDTO.setLogin(user.getLogin());
+            userDetailsDTO.setEmail(user.getEmail());
             ResponseEntity responseEntity = httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
 
             MailDTO mailDTO = new MailDTO();
-            mailDTO.setEmailOfRecipient(user.getLogin());
+            mailDTO.setEmailOfRecipient(user.getEmail());
             mailDTO.setBody("Twoje konto zostało aktywowane");
             mailDTO.setSubject("Aktywacja konta");
             mailServiceClient.sendSimpleMail(mailDTO);

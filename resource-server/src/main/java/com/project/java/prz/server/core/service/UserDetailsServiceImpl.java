@@ -33,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (userDetail == null) {
             userDetail = new UserDetail();
             userDetail.setLogin(userDetailsDTO.getLogin());
+            userDetail.setEmail(userDetailsDTO.getEmail());
 
             userDetail = userDetailsRepository.save(userDetail);
         } else throw new UserDetailException(USER_DETAIL_ALREADY_EXISTS);

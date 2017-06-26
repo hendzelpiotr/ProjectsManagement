@@ -35,14 +35,14 @@ public class UserSettingController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("user-details/{login:.+}")
+    @GetMapping("user-details/{login}")
     public ResponseEntity<List<UserSettingDTO>> getUserSettingsByLogin(@PathVariable("login") String login) {
         List<UserSettingDTO> userSettings = userSettingService.getUserSettings(login);
         return ResponseEntity.ok(userSettings);
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("user-details/{login:.+}")
+    @PutMapping("user-details/{login}")
     public ResponseEntity<UserSettingDTO> updateUserSettingByUserDetailLogin(@PathVariable("login") String login, @RequestBody UserSettingDTO userSettingDTO) {
         UserSettingDTO updatedUserSettingDTO = userSettingService.saveOrUpdate(login, userSettingDTO);
         return ResponseEntity.ok(updatedUserSettingDTO);

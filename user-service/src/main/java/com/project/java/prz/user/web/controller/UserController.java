@@ -30,15 +30,14 @@ public class UserController {
         return ResponseEntity.ok(disabledAccounts);
     }
 
-    @PutMapping("{id}/{login:.+}")
+    @PutMapping("{id}")
     @JsonView(View.SecuredUser.class)
     public ResponseEntity<UserDTO> enableUser(Principal principal,
                                               @PathVariable("id") Integer id,
-                                              @PathVariable("login") String login,
                                               @RequestBody @Valid UserDTO userDTO) {
         if (id.equals(userDTO.getId())) {
             principal.getName();
-            UserDTO enabledUser = userService.enableUserAccount(id, login, userDTO);
+            UserDTO enabledUser = userService.enableUserAccount(id, userDTO);
             return ResponseEntity.ok(enabledUser);
         } else throw new UserException(UserException.FailReason.INVALID_IDS);
     }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
 
     UserDTO registerNewUser(RegistrationDTO registrationDTO);
-    UserDTO enableUserAccount(Integer id, String login, UserDTO userDTO);
+    UserDTO enableUserAccount(Integer id, UserDTO userDTO);
     List<UserDTO> getAllDisabledAccounts();
 
 }

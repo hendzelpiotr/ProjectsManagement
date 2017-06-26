@@ -22,6 +22,8 @@ public class User {
     @NotNull
     private String login;
     @NotNull
+    private String email;
+    @NotNull
     private String password;
     @NotNull
     private Boolean enabled;

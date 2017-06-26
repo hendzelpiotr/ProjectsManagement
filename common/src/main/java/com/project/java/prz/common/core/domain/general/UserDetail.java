@@ -23,6 +23,8 @@ public class UserDetail {
     @Id
     @NotNull
     private String login;
+    @NotNull
+    private String email;
     private String name;
     private String surname;
     private Integer laboratoryGroup;
