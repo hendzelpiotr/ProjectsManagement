@@ -22,6 +22,7 @@ public class Project {
     private String name;
     @NotNull
     private String description;
+    @NotNull
     private Integer availableProjectsCounter;
     @OneToMany(mappedBy = "project")
     private List<UserProject> userProjects;

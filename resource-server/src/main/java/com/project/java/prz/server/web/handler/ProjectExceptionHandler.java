@@ -22,6 +22,8 @@ public class ProjectExceptionHandler implements BaseExceptionHandler<ProjectExce
         switch (e.getFailReason()) {
             case PROJECT_DOES_NOT_EXIST:
                 return returnApiResponseError(e, HttpStatus.NOT_FOUND);
+            case PROJECT_CAN_NOT_BE_REMOVED:
+                return returnApiResponseError(e, HttpStatus.BAD_REQUEST);
             default:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

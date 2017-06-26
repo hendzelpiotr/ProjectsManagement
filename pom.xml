@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.java.prz</groupId>
+    <groupId>com.project.java.prz</groupId>
     <artifactId>project-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -12,6 +12,7 @@
         <module>common</module>
         <module>authorization-server</module>
         <module>user-service</module>
+        <module>mail-service</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -42,6 +43,10 @@
         <mapstruct.version>1.2.0.Beta2</mapstruct.version>
         <!-- own -->
         <com.java.prz.common.version>0.0.1-SNAPSHOT</com.java.prz.common.version>
+        <!-- javax -->
+        <javax.persistance.version>1.0.2></javax.persistance.version>
+        <!-- hibernate jpa -->
+        <hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
         <!-- others -->
         <commons.io.version>2.5</commons.io.version>
         <jackson.version>2.9.0.pr2</jackson.version>
@@ -50,9 +55,21 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- javax -->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <!-- hibernate jpa -->
+            <dependency>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.1-api</artifactId>
+                <version>${hibernate.jpa.version}</version>
+            </dependency>
             <!-- own -->
             <dependency>
-                <groupId>com.java.prz</groupId>
+                <groupId>com.project.java.prz</groupId>
                 <artifactId>common</artifactId>
                 <version>${com.java.prz.common.version}</version>
             </dependency>
