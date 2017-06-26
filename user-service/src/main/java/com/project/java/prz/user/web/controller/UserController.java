@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok(disabledAccounts);
     }
 
-    @PutMapping(value = "{id}/{login:.+}")
+    @PutMapping("{id}/{login:.+}")
     @JsonView(View.SecuredUser.class)
     public ResponseEntity<UserDTO> enableUser(Principal principal,
                                               @PathVariable("id") Integer id,
