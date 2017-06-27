@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by Piotr on 24.06.2017.
  */
 @RestController
-@RequestMapping("internal-api/mails")
+@RequestMapping("mails")
 public class MailController {
 
     @Autowired

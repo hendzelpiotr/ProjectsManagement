@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Piotr on 06.04.2017.
  */
 @RestController
-@RequestMapping("api/projects")
+@RequestMapping("projects")
 public class ProjectController {
 
     @Autowired
