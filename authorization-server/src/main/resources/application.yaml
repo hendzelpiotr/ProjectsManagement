@@ -1,0 +1,24 @@
+#Database
+datasource:
+  user:
+    url: jdbc:mysql://localhost/user_service_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    username: admin
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+  oauth2:
+    url: jdbc:mysql://localhost/authentication_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    username: admin
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+
+#Server
+server:
+  port: 8081
+  context-path: /auth-server
+
+#Flyway
+flyway:
+  locations: db/migration
+  password: admin
+  user: admin
+  url: jdbc:mysql://localhost/authentication_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true

@@ -1,0 +1,36 @@
+#Spring
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/projects_management_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    username: admin
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  http:
+    multipart:
+      max-file-size: 128000KB
+      max-request-size: 128000KB
+  application:
+    name: project-service
+
+#Flyway
+flyway:
+  locations: db/migration
+
+#Server
+server:
+  port: 8082
+  context-path: /project-service
+
+#File
+upload:
+  destination:
+    path: C:\\
+
+#Oauth2
+oauth2:
+  client-id: ResourceServer_PRZ_2017
+  client-secret: zaq1@WSXzaq1@WSX
+  check-token-url: http://localhost:8081/auth-server/oauth/check_token

@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>resource-server</module>
+        <module>project-service</module>
         <module>common</module>
         <module>authorization-server</module>
         <module>user-service</module>

@@ -8,7 +8,7 @@ import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
-import com.project.java.prz.user.core.client.MailServiceClient;
+import com.project.java.prz.user.core.client.EnabledMailServiceClient;
 import com.project.java.prz.user.core.dao.UserDao;
 import com.project.java.prz.user.core.repository.RoleRepository;
 import com.project.java.prz.user.core.repository.UserRepository;
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     private HttpService httpService;
 
     @Autowired
-    private MailServiceClient mailServiceClient;
+    private EnabledMailServiceClient mailServiceClient;
 
     @Value("${resource-server.url}")
     private String resourceServerUrl;

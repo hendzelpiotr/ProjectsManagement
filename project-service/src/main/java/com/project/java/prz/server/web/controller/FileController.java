@@ -17,7 +17,7 @@ import java.security.Principal;
  * Created by phendzel on 5/12/2017.
  */
 @RestController
-@RequestMapping("api/files")
+@RequestMapping("files")
 public class FileController {
 
     @Autowired

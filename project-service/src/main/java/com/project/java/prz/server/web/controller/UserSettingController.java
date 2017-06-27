@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Piotr on 09.06.2017.
  */
 @RestController
-@RequestMapping("api/user-settings")
+@RequestMapping("user-settings")
 public class UserSettingController {
 
     @Autowired

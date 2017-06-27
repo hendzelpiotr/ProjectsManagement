@@ -14,7 +14,7 @@ import java.security.Principal;
  * Created by Piotr on 04.06.2017.
  */
 @RestController
-@RequestMapping("api/user-details")
+@RequestMapping("user-details")
 public class UserDetailsController {
 
     @Autowired
