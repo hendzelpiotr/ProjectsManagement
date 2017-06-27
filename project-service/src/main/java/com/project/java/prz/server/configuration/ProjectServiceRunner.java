@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.project.java.prz.common.core.domain.general")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class Runner {
+public class ProjectServiceRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(Runner.class, args);
+        SpringApplication.run(ProjectServiceRunner.class, args);
     }
 
 }
