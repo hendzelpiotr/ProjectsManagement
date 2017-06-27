@@ -22,4 +22,4 @@ eureka:
 
 server:
   port: 8085
-  context-path: mail-service
+  context-path: /mail-service

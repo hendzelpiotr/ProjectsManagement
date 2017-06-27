@@ -33,7 +33,7 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("api/projects", "/api/user-details").permitAll()
+                .antMatchers("/projects", "/user-details").permitAll()
                 .anyRequest().authenticated();
     }
 
