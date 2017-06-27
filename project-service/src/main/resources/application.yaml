@@ -12,6 +12,8 @@ spring:
     multipart:
       max-file-size: 128000KB
       max-request-size: 128000KB
+  application:
+    name: project-service
 
 #Flyway
 flyway:
