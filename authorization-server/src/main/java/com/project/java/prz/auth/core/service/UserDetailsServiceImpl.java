@@ -26,8 +26,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(login);
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
-        return buildUserForAuthentication(user, authority);
+
+        if(user == null) {
+            throw new UsernameNotFoundException(login + " does not exist.");
+        } else {
+            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
+            return buildUserForAuthentication(user, authority);
+        }
     }
 
     private UserDetails buildUserForAuthentication(User user, GrantedAuthority authority) {
