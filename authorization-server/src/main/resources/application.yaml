@@ -22,3 +22,8 @@ flyway:
   password: admin
   user: admin
   url: jdbc:mysql://localhost/authentication_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+
+#Spring
+spring:
+  application:
+    name: authorization-server
