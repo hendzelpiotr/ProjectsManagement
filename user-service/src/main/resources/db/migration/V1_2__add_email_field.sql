@@ -1,8 +1,9 @@
-ALTER TABLE user
+ALTER TABLE "user"
     ADD COLUMN email VARCHAR(150);
 
-UPDATE user
+UPDATE "user"
 SET email = 'admin@prz.com';
 
-ALTER TABLE user
-    MODIFY email VARCHAR(150) NOT NULL;
+ALTER TABLE "user"
+    ALTER COLUMN email TYPE VARCHAR(150),
+    ALTER COLUMN email SET NOT NULL;

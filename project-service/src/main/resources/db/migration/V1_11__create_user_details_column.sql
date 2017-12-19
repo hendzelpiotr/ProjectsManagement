@@ -10,7 +10,11 @@ CREATE TABLE IF NOT EXISTS user_details
 );
 
 ALTER TABLE user_project
-  CHANGE user_id user_login VARCHAR(100) NOT NULL;
+    RENAME user_id TO user_login;
+
+ALTER TABLE user_project
+    ALTER COLUMN user_login TYPE VARCHAR(100),
+    ALTER COLUMN user_login SET NOT NULL;
 
 ALTER TABLE user_project
   ADD FOREIGN KEY (user_login) REFERENCES user_details (login);

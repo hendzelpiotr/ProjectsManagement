@@ -1,2 +1,2 @@
-UPDATE user
+UPDATE "user"
 SET enabled = TRUE;

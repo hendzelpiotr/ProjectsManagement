@@ -1,7 +1,5 @@
-CREATE DATABASE projects_management_db;
-CREATE DATABASE user_service_db;
-CREATE DATABASE authentication_db;
+create role "admin" with login password 'admin';
 
-GRANT ALL PRIVILEGES ON projects_management_db.* To 'admin'@'localhost' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON user_service_db.* To 'admin'@'localhost' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON authentication_db.* To 'admin'@'localhost' IDENTIFIED BY 'admin';
+create database "projects_management_db" owner "admin" encoding 'UTF8' template template0;
+create database "user_service_db" owner "admin" encoding 'UTF8' template template0;
+create database "authentication_db" owner "admin" encoding 'UTF8' template template0;

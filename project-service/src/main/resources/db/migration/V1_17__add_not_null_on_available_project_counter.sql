@@ -1,2 +1,3 @@
 ALTER TABLE project
-  MODIFY available_projects_counter INTEGER NOT NULL;
+  ALTER COLUMN available_projects_counter TYPE INTEGER,
+  ALTER COLUMN available_projects_counter SET NOT NULL;

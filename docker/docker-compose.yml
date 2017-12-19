@@ -1,10 +1,7 @@
-version: '2'
-services:
-  db:
-    image: mysql
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    environment:
-      MYSQL_ROOT_PASSWORD: qwerty
+PostgreSQL_ProjectsManagement:
+  image: postgres:9.4
+  ports:
+    - "5432:5432"
+  volumes:
+    - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    - data_container:/var/lib/pgsql/data

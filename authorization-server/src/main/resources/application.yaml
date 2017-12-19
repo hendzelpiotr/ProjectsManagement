@@ -1,15 +1,13 @@
 #Database
 datasource:
   user:
-    url: jdbc:mysql://localhost/user_service_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/user_service_db
     username: admin
     password: admin
-    driver-class-name: com.mysql.jdbc.Driver
   oauth2:
-    url: jdbc:mysql://localhost/authentication_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/authentication_db
     username: admin
     password: admin
-    driver-class-name: com.mysql.jdbc.Driver
 
 #Server
 server:
@@ -21,9 +19,13 @@ flyway:
   locations: db/migration
   password: admin
   user: admin
-  url: jdbc:mysql://localhost/authentication_db?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+  url: jdbc:postgresql://localhost:5432/authentication_db
 
 #Spring
 spring:
   application:
     name: authorization-server
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true

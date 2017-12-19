@@ -14,7 +14,7 @@ create table oauth_client_details (
 
 create table oauth_client_token (
   token_id VARCHAR(255),
-  token LONG VARBINARY,
+  token BYTEA,
   authentication_id VARCHAR(255) PRIMARY KEY,
   user_name VARCHAR(255),
   client_id VARCHAR(255)
@@ -22,22 +22,22 @@ create table oauth_client_token (
 
 create table oauth_access_token (
   token_id VARCHAR(255),
-  token LONG VARBINARY,
+  token BYTEA,
   authentication_id VARCHAR(255) PRIMARY KEY,
   user_name VARCHAR(255),
   client_id VARCHAR(255),
-  authentication LONG VARBINARY,
+  authentication BYTEA,
   refresh_token VARCHAR(255)
 );
 
 create table oauth_refresh_token (
   token_id VARCHAR(255),
-  token LONG VARBINARY,
-  authentication LONG VARBINARY
+  token BYTEA,
+  authentication BYTEA
 );
 
 create table oauth_code (
-  code VARCHAR(255), authentication LONG VARBINARY
+  code VARCHAR(255), authentication BYTEA
 );
 
 create table oauth_approvals (
@@ -65,14 +65,14 @@ create table ClientDetails (
 
 CREATE TABLE IF NOT EXISTS role
 (
-  id INTEGER NOT NULL auto_increment,
+  id SERIAL NOT NULL,
   name VARCHAR(100) NOT NULL,
   PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS "user"
 (
-  id INTEGER NOT NULL AUTO_INCREMENT,
+  id SERIAL NOT NULL,
   login VARCHAR(100) NOT NULL,
   password VARCHAR(100) NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -82,6 +82,6 @@ CREATE TABLE IF NOT EXISTS user
   laboratory_group INTEGER,
   enabled BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (id),
-  FOREIGN KEY (professor_id) REFERENCES user(id),
+  FOREIGN KEY (professor_id) REFERENCES "user"(id),
   FOREIGN KEY (role_id) REFERENCES role(id)
 );

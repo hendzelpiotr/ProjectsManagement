@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class UserProject {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String mark;
     @Column(name = "datetime_of_project_selection")

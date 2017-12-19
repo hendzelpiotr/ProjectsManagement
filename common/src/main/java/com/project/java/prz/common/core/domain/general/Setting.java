@@ -19,7 +19,7 @@ import java.util.List;
 public class Setting {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotNull
     @Convert(converter = SettingNameConverter.class)

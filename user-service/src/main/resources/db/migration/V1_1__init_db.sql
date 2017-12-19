@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS role
 (
-  id INTEGER NOT NULL auto_increment,
+  id SERIAL NOT NULL,
   name VARCHAR(100) NOT NULL,
   PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS "user"
 (
-  id INTEGER NOT NULL AUTO_INCREMENT,
+  id SERIAL NOT NULL,
   login VARCHAR(100) NOT NULL,
   password VARCHAR(100) NOT NULL,
   role_id INTEGER NOT NULL,
@@ -21,13 +21,13 @@ INSERT INTO role
 VALUES
   ('ROLE_ADMIN'), ('ROLE_STUDENT');
 
-INSERT INTO user
+INSERT INTO "user"
 (login, password, role_id, enabled)
 VALUES
-  ('adminprz', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 1, 1);
+  ('adminprz', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 1, true);
 
-INSERT INTO user
+INSERT INTO "user"
 (login, password, role_id, enabled)
 VALUES
-  ('kgracik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 2, 1),
-  ('jsadnik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 2, 1);
+  ('kgracik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 2, true),
+  ('jsadnik', '$2a$10$MTLoYDtNVuM2DeOrwglck.l.BaIEeSBRZf5G4ghwSHgrq4Zf04c5.', 2, true);

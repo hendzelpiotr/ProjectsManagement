@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS setting
 (
-  id INTEGER NOT NULL AUTO_INCREMENT,
+  id SERIAL NOT NULL,
   name VARCHAR(50) NOT NULL,
   value TEXT NOT NULL,
   data_type VARCHAR(50) NOT NULL,
@@ -14,7 +14,7 @@ INSERT INTO setting (name, value, data_type)
 
 CREATE TABLE IF NOT EXISTS user_setting
 (
-  id INTEGER NOT NULL AUTO_INCREMENT,
+  id SERIAL NOT NULL,
   user_id INTEGER NOT NULL,
   setting_id INTEGER NOT NULL,
   PRIMARY KEY (id),
