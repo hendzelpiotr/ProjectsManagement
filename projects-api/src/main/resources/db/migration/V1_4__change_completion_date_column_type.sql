@@ -1,0 +1,2 @@
+ALTER TABLE user_project
+    ALTER COLUMN completion_date TYPE TIMESTAMP WITHOUT TIME ZONE;

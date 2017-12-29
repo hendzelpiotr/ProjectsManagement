@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: notifications-api
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: przmanagements@gmail.com
+    password: projectsmanagement2017
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+server:
+  port: 8085
+  context-path: /notifications-api
