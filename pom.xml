@@ -8,11 +8,12 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>resource-server</module>
+        <module>projects-api</module>
         <module>common</module>
-        <module>authorization-server</module>
-        <module>user-service</module>
-        <module>mail-service</module>
+        <module>auth-server</module>
+        <module>users-api</module>
+        <module>notifications-api</module>
+        <module>eureka-server</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -44,9 +45,11 @@
         <!-- own -->
         <com.java.prz.common.version>0.0.1-SNAPSHOT</com.java.prz.common.version>
         <!-- javax -->
-        <javax.persistance.version>1.0.2></javax.persistance.version>
+        <javax.persistance.version>1.0.2</javax.persistance.version>
         <!-- hibernate jpa -->
         <hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
+        <!-- eureka -->
+        <eureka.version>1.3.2.RELEASE</eureka.version>
         <!-- others -->
         <commons.io.version>2.5</commons.io.version>
         <jackson.version>2.9.0.pr2</jackson.version>
@@ -55,17 +58,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- javax -->
+            <!-- eureka -->
             <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>persistence-api</artifactId>
-                <version>1.0.2</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-eureka</artifactId>
+                <version>${eureka.version}</version>
             </dependency>
-            <!-- hibernate jpa -->
+            <!-- eureka -->
             <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>${hibernate.jpa.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>${eureka.version}</version>
             </dependency>
             <!-- own -->
             <dependency>

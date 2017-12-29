@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class UserSetting {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotNull
     @Column(columnDefinition = "TEXT")

@@ -27,10 +27,6 @@
         </dependency>
         <!-- database -->
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>${javax.validation.version}</version>
@@ -38,6 +34,7 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${hibernate.jpa.version}</version>
         </dependency>
         <!-- test -->
         <dependency>

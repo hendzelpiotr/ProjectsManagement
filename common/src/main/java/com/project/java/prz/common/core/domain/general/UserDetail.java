@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -23,6 +20,8 @@ public class UserDetail {
     @Id
     @NotNull
     private String login;
+    @NotNull
+    private String email;
     private String name;
     private String surname;
     private Integer laboratoryGroup;

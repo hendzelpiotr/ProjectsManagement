@@ -17,6 +17,8 @@ public class UserDTO {
     @JsonView(View.SecuredUser.class)
     private Integer id;
     @JsonView(View.SecuredUser.class)
+    private String email;
+    @JsonView(View.SecuredUser.class)
     private String login;
     private String password;
     @JsonView(View.SecuredUser.class)
