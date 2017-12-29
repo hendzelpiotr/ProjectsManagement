@@ -2,12 +2,12 @@
 datasource:
   user:
     url: jdbc:postgresql://localhost:5432/user_service_db
-    username: admin
-    password: admin
+    username: user_service_db_user_read_only
+    password: admin4
   oauth2:
     url: jdbc:postgresql://localhost:5432/authentication_db
-    username: admin
-    password: admin
+    username: authentication_server_db_user
+    password: admin3
 
 #Server
 server:
@@ -17,8 +17,8 @@ server:
 #Flyway
 flyway:
   locations: db/migration
-  password: admin
-  user: admin
+  password: admin3
+  user: authentication_server_db_user
   url: jdbc:postgresql://localhost:5432/authentication_db
 
 #Spring

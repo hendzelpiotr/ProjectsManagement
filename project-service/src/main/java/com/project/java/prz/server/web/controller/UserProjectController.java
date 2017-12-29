@@ -44,12 +44,14 @@ public class UserProjectController {
     }
 
     @DeleteMapping(value = "{id}")
+    @Secured({"ROLE_STUDENT", "ROLE_ADMIN"})
     public ResponseEntity delete(@PathVariable("id") Integer id, Principal principal, Authentication authentication) {
         userProjectService.deleteById(principal.getName(), authentication.getAuthorities(), id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
+    @Secured({"ROLE_STUDENT", "ROLE_ADMIN"})
     public ResponseEntity<UserProjectDTO> update(@PathVariable("id") Integer id,
                                                  @RequestBody UserProjectDTO userProjectDTO,
                                                  Principal principal,

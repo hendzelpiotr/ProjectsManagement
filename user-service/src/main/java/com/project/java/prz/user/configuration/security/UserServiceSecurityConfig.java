@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  */
 @Configuration
 @EnableResourceServer
-public class UserResourceSecurityConfig extends ResourceServerConfigurerAdapter {
+public class UserServiceSecurityConfig extends ResourceServerConfigurerAdapter {
 
     @Value("${oauth2.client-id}")
     private String clientId;
@@ -34,9 +34,7 @@ public class UserResourceSecurityConfig extends ResourceServerConfigurerAdapter 
     public void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/registrations").permitAll()
-                .antMatchers(HttpMethod.PUT, "/registrations/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
     }
 
     @Override

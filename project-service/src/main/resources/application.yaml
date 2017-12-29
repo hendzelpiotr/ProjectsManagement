@@ -2,8 +2,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/projects_management_db
-    username: admin
-    password: admin
+    username: project_service_db_user
+    password: admin1
   jpa:
     hibernate:
       ddl-auto: validate

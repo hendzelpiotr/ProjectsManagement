@@ -8,5 +8,4 @@ import org.springframework.cloud.netflix.feign.FeignClient;
  */
 @FeignClient("MAIL-SERVICE")
 public interface EnabledMailServiceClient extends MailServiceClient {
-
 }

@@ -24,6 +24,7 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping(consumes = "multipart/form-data")
+    @Secured("ROLE_STUDENT")
     public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();

@@ -7,6 +7,7 @@ import com.project.java.prz.common.core.util.View;
 import com.project.java.prz.user.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("disabled")
+    @Secured("ROLE_ADMIN")
     @JsonView(View.SecuredUser.class)
     public ResponseEntity<List<UserDTO>> getDisabledAccounts() {
         List<UserDTO> disabledAccounts = userService.getAllDisabledAccounts();
@@ -31,6 +33,7 @@ public class UserController {
     }
 
     @PutMapping("{id}")
+    @Secured("ROLE_ADMIN")
     @JsonView(View.SecuredUser.class)
     public ResponseEntity<UserDTO> enableUser(Principal principal,
                                               @PathVariable("id") Integer id,

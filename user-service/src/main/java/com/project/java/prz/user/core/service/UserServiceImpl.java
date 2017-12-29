@@ -9,6 +9,7 @@ import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.mapper.UserMapper;
 import com.project.java.prz.user.core.client.EnabledMailServiceClient;
+import com.project.java.prz.user.core.client.EnabledProjectServiceClient;
 import com.project.java.prz.user.core.dao.UserDao;
 import com.project.java.prz.user.core.repository.RoleRepository;
 import com.project.java.prz.user.core.repository.UserRepository;
@@ -41,10 +42,10 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private HttpService httpService;
+    private EnabledMailServiceClient mailServiceClient;
 
     @Autowired
-    private EnabledMailServiceClient mailServiceClient;
+    private EnabledProjectServiceClient projectServiceClient;
 
     @Value("${resource-server.url}")
     private String resourceServerUrl;
@@ -83,11 +84,11 @@ public class UserServiceImpl implements UserService {
             user.setEnabled(Boolean.TRUE);
             user = userRepository.save(user);
 
-            ResponseEntity responseEntity = createUserDetail(user);
+            ResponseEntity response = createUserDetail(user);
 
             sendActivationMail(user);
 
-            if (responseEntity.getStatusCode().equals(HttpStatus.CREATED)) {
+            if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                 return UserMapper.INSTANCE.convertToDTO(user);
             } else throw new UserException(UserException.FailReason.CAN_NOT_CREATE_USER);
 
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
         UserDetailDTO userDetailsDTO = new UserDetailDTO();
         userDetailsDTO.setLogin(user.getLogin());
         userDetailsDTO.setEmail(user.getEmail());
-        return httpService.sendPost(resourceServerUrl + userDetailsContextPath, userDetailsDTO);
+        return projectServiceClient.create(userDetailsDTO);
     }
 
     private void sendActivationMail(User user) {

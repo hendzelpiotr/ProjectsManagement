@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS user_details
 (
   login            VARCHAR(100) NOT NULL,
-  name             VARCHAR(100) NOT NULL,
-  surname          VARCHAR(100) NOT NULL,
+  name             VARCHAR(100),
+  surname          VARCHAR(100),
   professor_login  VARCHAR(100),
   laboratory_group INTEGER,
   PRIMARY KEY (login),

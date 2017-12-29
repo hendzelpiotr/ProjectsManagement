@@ -21,6 +21,7 @@ public class UserSettingController {
     @Autowired
     private UserSettingService userSettingService;
 
+    @Secured({"ROLE_STUDENT", "ROLE_ADMIN"})
     @GetMapping("my")
     public ResponseEntity<List<UserSettingDTO>> getMyUserSettings(Principal principal) {
         List<UserSettingDTO> userSettingDTOs = userSettingService.getUserSettings(principal.getName());
