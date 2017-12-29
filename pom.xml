@@ -8,11 +8,11 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>project-service</module>
+        <module>projects-api</module>
         <module>common</module>
-        <module>authorization-server</module>
-        <module>user-service</module>
-        <module>mail-service</module>
+        <module>auth-server</module>
+        <module>users-api</module>
+        <module>notifications-api</module>
         <module>eureka-server</module>
     </modules>
 

@@ -1,0 +1,33 @@
+#Database
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user_service_db
+    username: user_service_db_user
+    password: admin2
+  application:
+    name: users-api
+  jpa:
+      hibernate:
+        ddl-auto: validate
+      show-sql: true
+
+#Flyway
+flyway:
+  locations: db/migration
+
+#Server
+server:
+  port: 8083
+  context-path: /users-api
+
+#Oauth2
+oauth2:
+  client-id: UserServer_PRZ_2017
+  client-secret: xsw2#EDCCDE#2wsx
+  check-token-url: http://localhost:8081/auth-server/oauth/check_token
+
+#eureka
+eureka:
+  client:
+    serviceurl:
+      defaultzone: ${EUREKA_URI:http://localhost:8761/eureka}

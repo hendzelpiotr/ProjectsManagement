@@ -1,0 +1,31 @@
+#Database
+datasource:
+  user:
+    url: jdbc:postgresql://localhost:5432/user_service_db
+    username: user_service_db_user_read_only
+    password: admin4
+  oauth2:
+    url: jdbc:postgresql://localhost:5432/authentication_db
+    username: authentication_server_db_user
+    password: admin3
+
+#Server
+server:
+  port: 8081
+  context-path: /auth-server
+
+#Flyway
+flyway:
+  locations: db/migration
+  password: admin3
+  user: authentication_server_db_user
+  url: jdbc:postgresql://localhost:5432/authentication_db
+
+#Spring
+spring:
+  application:
+    name: auth-server
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
