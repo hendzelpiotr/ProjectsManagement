@@ -20,6 +20,7 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @Secured({"ROLE_ADMIN","ROLE_STUDENT"})
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAll() {
         return ResponseEntity.ok(projectService.getAll());
