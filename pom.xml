@@ -14,6 +14,7 @@
         <module>users-api</module>
         <module>notifications-api</module>
         <module>eureka-server</module>
+        <module>contracts</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -33,6 +34,7 @@
         <oauth.version>2.0.10.RELEASE</oauth.version>
         <json.web.token.version>0.7.0</json.web.token.version>
         <security.core.version>4.2.2.RELEASE</security.core.version>
+        <spring.cloud.security.version>1.2.2.RELEASE</spring.cloud.security.version>
         <!-- database -->
         <flyway.version>4.1.2</flyway.version>
         <!-- test -->
@@ -50,6 +52,9 @@
         <hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
         <!-- eureka -->
         <eureka.version>1.3.2.RELEASE</eureka.version>
+        <!-- swagger -->
+        <swagger.version>2.7.0</swagger.version>
+        <swagger.annotation.version>1.5.8</swagger.annotation.version>
         <!-- others -->
         <commons.io.version>2.5</commons.io.version>
         <jackson.version>2.9.0.pr2</jackson.version>
