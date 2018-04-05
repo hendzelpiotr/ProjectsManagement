@@ -31,3 +31,8 @@ eureka:
   client:
     serviceurl:
       defaultzone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+#Contracts
+projectManagement:
+  name: PROJECTS-API
+  url: http://PROJECTS-API

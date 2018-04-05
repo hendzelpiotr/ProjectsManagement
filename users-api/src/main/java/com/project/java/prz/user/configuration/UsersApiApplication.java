@@ -1,6 +1,7 @@
 package com.project.java.prz.user.configuration;
 
 import com.project.java.prz.common.configuration.swagger.SwaggerConfiguration;
+import com.project.java.prz.contract.api.UserDetailApiClient;
 import com.project.java.prz.user.core.client.EnabledNotificationsApiClient;
 import com.project.java.prz.user.core.client.EnabledProjectsApiClient;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.project.java.prz.common.core.domain.security")
 @EnableEurekaClient
-@EnableFeignClients(basePackageClasses = {EnabledNotificationsApiClient.class, EnabledProjectsApiClient.class})
+@EnableFeignClients(basePackageClasses = {EnabledNotificationsApiClient.class, EnabledProjectsApiClient.class, UserDetailApiClient.class})
 @Import(SwaggerConfiguration.class)
 public class UsersApiApplication {
 

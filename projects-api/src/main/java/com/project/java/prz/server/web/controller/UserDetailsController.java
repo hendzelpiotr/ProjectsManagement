@@ -2,6 +2,7 @@ package com.project.java.prz.server.web.controller;
 
 import com.project.java.prz.common.core.dto.UserDetailDTO;
 import com.project.java.prz.common.core.exception.GeneralException;
+import com.project.java.prz.contract.api.UserDetailApi;
 import com.project.java.prz.server.core.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.security.Principal;
  */
 @RestController
 @RequestMapping("user-details")
-public class UserDetailsController {
+public class UserDetailsController implements UserDetailApi {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -43,6 +44,7 @@ public class UserDetailsController {
         return ResponseEntity.ok(userDetailDTO);
     }
 
+    @Override
     @GetMapping
     @Secured({"ROLE_STUDENT", "ROLE_ADMIN"})
     public ResponseEntity<String> getHelloWorld() {

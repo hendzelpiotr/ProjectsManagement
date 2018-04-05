@@ -62,17 +62,25 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/contract.yaml</inputSpec>
+
                             <language>spring</language>
                             <library>spring-cloud</library>
+
+                            <invokerPackage>com.project.java.prz.contract</invokerPackage>
+                            <apiPackage>com.project.java.prz.contract.api</apiPackage>
+                            <modelPackage>com.project.java.prz.contract.dto</modelPackage>
+
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                             </configOptions>
+
                             <typeMappings>
                                 <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>
                             </typeMappings>
                             <importMappings>
                                 <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
                             </importMappings>
+
                             <output>${project.build.directory}/generated-sources/swagger</output>
                         </configuration>
                     </execution>

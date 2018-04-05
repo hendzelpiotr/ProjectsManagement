@@ -5,6 +5,7 @@ import com.project.java.prz.common.core.dto.UserDTO;
 import com.project.java.prz.common.core.exception.UserException;
 import com.project.java.prz.common.core.util.View;
 import com.project.java.prz.user.core.service.UserService;
+import io.swagger.api.UserDetailApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -23,6 +24,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDetailApiClient userDetailApiClient;
 
     @GetMapping("disabled")
     @Secured("ROLE_ADMIN")
@@ -43,6 +47,11 @@ public class UserController {
             UserDTO enabledUser = userService.enableUserAccount(id, userDTO);
             return ResponseEntity.ok(enabledUser);
         } else throw new UserException(UserException.FailReason.INVALID_IDS);
+    }
+
+    @GetMapping
+    public ResponseEntity<String> getHelloWorld() {
+        return userDetailApiClient.getHelloWorld();
     }
 
 }
